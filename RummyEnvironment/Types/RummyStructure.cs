@@ -4,13 +4,13 @@ namespace RummyEnvironment
 {
     public abstract class RummyStructure
     {
-        public Guid StructureId { get; }
+        public Guid Id { get; }
 
         public Token[] Tokens { get; }
 
-        public RummyStructure(Guid structureId, Token[] tokens)
+        public RummyStructure(Guid id, Token[] tokens)
         {
-            this.StructureId = structureId;
+            this.Id = id;
             this.Tokens = tokens;
         }
     }

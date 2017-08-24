@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ExtensionMethods.cs" />
+    <Compile Include="RummyException.cs" />
     <Compile Include="RummyManager.cs" />
     <Compile Include="GameEntities\TokensLake.cs" />
     <Compile Include="GameEntities\Board.cs" />
