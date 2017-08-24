@@ -18,7 +18,9 @@ namespace RummyEnvironment
 
             tokenLake = new TokensLake();
             tokenLake.CreateNew();
-            tokenLake.ShuffleTokens();
+            tokenLake.ShuffleTokensList();
+
+            List<Token> exp = tokenLake.GrabTokens(14);
         }
     }
 }

@@ -35,13 +35,25 @@ namespace RummyEnvironment
             }
         }
 
-        public void ShuffleTokens()
+        public void ShuffleTokensList()
         {
             if (this.Tokens == null || this.Tokens.Count < 2)
             {
                 return;
             }
             this.Tokens.Shuffle();
+        }
+
+        public List<Token> GetToken()
+        {
+            return this.GrabTokens(1);
+        }
+
+        public List<Token> GrabTokens(int numberOfTokens)
+        {
+            List<Token> tokensToMove = this.Tokens.GetRange(0, numberOfTokens);
+            this.Tokens.RemoveRange(0, numberOfTokens);
+            return tokensToMove;
         }
     }
 }
