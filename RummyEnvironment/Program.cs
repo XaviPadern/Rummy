@@ -16,7 +16,9 @@ namespace RummyEnvironment
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new RummyForm());
+
+            //Application.Run(new RummyForm());
+            RummyManager manager = new RummyManager();
         }
     }
 }
