@@ -1,6 +1,6 @@
 ﻿namespace RummyEnvironment
 {
-    partial class Form1
+    partial class RummyForm
     {
         /// <summary>
         /// Required designer variable.

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace RummyEnvironment
 {
-    public partial class Form1 : Form
+    public partial class RummyForm : Form
     {
-        public Form1()
+        public RummyForm()
         {
             InitializeComponent();
         }
