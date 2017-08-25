@@ -58,6 +58,7 @@
     <Compile Include="GameEntities\PlayerTest.cs" />
     <Compile Include="GameEntities\BoardTest.cs" />
     <Compile Include="GameEntities\TokensLakeTest.cs" />
+    <Compile Include="RummyManagerTest.cs" />
     <Compile Include="Types\TokenTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

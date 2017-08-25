@@ -44,7 +44,7 @@ namespace RummyEnvironment
             this.Tokens.Shuffle();
         }
 
-        public List<IToken> GetToken()
+        public List<IToken> GrabToken()
         {
             return this.GrabTokens(1);
         }

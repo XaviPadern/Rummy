@@ -23,6 +23,11 @@ namespace TestHelpers
             return null;
         }
 
+        public static void AssertTokensInListAreValid(List<IToken> tokenList)
+        {
+            Assert.IsTrue(tokenList.All(token => Token.IsTokenValid(token)));
+        }
+
         public static void AssertTokenListsAreTheSame(List<IToken> list1, List<IToken> list2)
         {
             Assert.IsTrue(TokenListsComparisonBase(list1, list2));

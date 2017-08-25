@@ -7,7 +7,7 @@ namespace RummyEnvironment
         List<IToken> Tokens { get; }
         void CreateNew();
         void ShuffleTokensList();
-        List<IToken> GetToken();
+        List<IToken> GrabToken();
         List<IToken> GrabTokens(int numberOfTokens);
     }
 }

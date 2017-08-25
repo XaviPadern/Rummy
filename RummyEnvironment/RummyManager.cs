@@ -5,11 +5,11 @@ namespace RummyEnvironment
     public class RummyManager
     {
         public const int InitialTokensForPlayer = 14;
-        public static readonly string[] PlayerNames = { "Xavi" };
+        public static readonly string[] PlayerNames = { "Godzilla" };
 
-        private ITokensLake tokensLake;
-        private IBoard board;
-        private List<IPlayer> players;
+        public ITokensLake tokensLake { get; private set; }
+        public IBoard board { get; private set; }
+        public List<IPlayer> players { get; private set; }
 
         public RummyManager()
         {
