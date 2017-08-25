@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RummyEnvironment;
 using System.Linq;
+using TestHelpers;
 
 namespace RummyEnvironmentTest
 {
@@ -14,53 +15,44 @@ namespace RummyEnvironmentTest
             TokensLake lake = new TokensLake();
             lake.CreateNew();
 
-            List<string> ids = this.GetTokenIds(lake.Tokens);
+            Assert.IsTrue(lake.Tokens.All(token => lake.Tokens.Count(s => s.IsEqual(token)) == 1));
+        }
 
-            Assert.IsTrue(ids.Count == ids.Distinct().Count());
+        [TestMethod]
+        public void TokensLake_InvalidLake_Fails()
+        {
+            TokensLake lake = new TokensLake();
+            lake.CreateNew();
+            lake.Tokens[3] = lake.Tokens[14];
+
+            Assert.IsFalse(lake.Tokens.All(token => lake.Tokens.Count(s => s.IsEqual(token)) == 1));
         }
 
         [TestMethod]
         public void TokensLake_ShuffleTokensList_SameTokensInDifferentOrder()
         {
-            // Pending: Use a better equality assertion (with Token.IsEqual()). Not just the IDs.
             TokensLake lake = new TokensLake();
             lake.CreateNew();
-            List<string> initialIds = this.GetTokenIds(lake.Tokens);
-
+            List<IToken> initialTokens = lake.Tokens.GetRange(0, lake.Tokens.Count);
             lake.ShuffleTokensList();
-            List<string> shuffledIds = this.GetTokenIds(lake.Tokens);
+            List<IToken> shuffledTokens = lake.Tokens;
 
-            Assert.AreEqual(initialIds.Count, shuffledIds.Count);
-            Assert.IsTrue(initialIds.All(shuffledIds.Contains));
-            Assert.IsFalse(initialIds.SequenceEqual(shuffledIds));
+            AssertHelpers.AssertTokenListsContainsTheSameElements(initialTokens, shuffledTokens);
         }
 
         [TestMethod]
         public void TokensLake_GrabTokens_NewListIsCreatedAndRemovedFromTheOriginalOne()
         {
-            // Pending: Use a better equality assertion (with Token.IsEqual()). Not just the IDs.
             const int TokensTaken = 14;
 
             TokensLake lake = new TokensLake();
             lake.CreateNew();
-            List<string> initialIds = this.GetTokenIds(lake.Tokens);
+            List<IToken> initialTokens = lake.Tokens.GetRange(0, lake.Tokens.Count);
 
-            List<string> newListIds = this.GetTokenIds(lake.GrabTokens(TokensTaken));
-            List<string> croppedListIds = this.GetTokenIds(lake.Tokens);
+            List<IToken> newTokensList = lake.GrabTokens(TokensTaken);
+            newTokensList.AddRange(lake.Tokens);
 
-            newListIds.AddRange(croppedListIds);
-
-            Assert.AreEqual(initialIds.Count, newListIds.Count);
-            Assert.IsTrue(initialIds.SequenceEqual(newListIds));
-        }
-
-        
-
-        private List<string> GetTokenIds(List<Token> tokens)
-        {
-            List<string> ids = new List<string>();
-            tokens.ForEach(token => ids.Add(token.Id.ToString()));
-            return ids;
+            AssertHelpers.AssertTokenListsAreTheSame(initialTokens, newTokensList);
         }
     }
 }

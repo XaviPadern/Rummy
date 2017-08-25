@@ -4,7 +4,12 @@ namespace RummyEnvironment
 {
     public class RummyManager
     {
-        private TokensLake tokenLake;
+        public const int InitialTokensForPlayer = 14;
+        public static readonly string[] PlayerNames = { "Xavi" };
+
+        private ITokensLake tokensLake;
+        private IBoard board;
+        private List<IPlayer> players;
 
         public RummyManager()
         {
@@ -13,14 +18,21 @@ namespace RummyEnvironment
 
         private void Start()
         {
-            // TODO:
-            // Create all the tokens, put in the TokenLake and spread them among players.
+            // Tokens lake creation.
+            tokensLake = new TokensLake();
+            tokensLake.CreateNew();
+            tokensLake.ShuffleTokensList();
 
-            tokenLake = new TokensLake();
-            tokenLake.CreateNew();
-            tokenLake.ShuffleTokensList();
+            // Board creation.
+            board = new Board();
 
-            List<Token> exp = tokenLake.GrabTokens(14);
+            // Players creation.
+            players = new List<IPlayer>();
+            foreach (string playerName in PlayerNames)
+            {
+                List<IToken> tokensForPlayer = tokensLake.GrabTokens(InitialTokensForPlayer);
+                players.Add(new Player(playerName, tokensForPlayer));
+            }
         }
     }
 }

@@ -2,13 +2,16 @@
 
 namespace RummyEnvironment
 {
-    public class Board
+    public class Board : IBoard
     {
-        public List<RummyStructure> Structures { get; }
+        public List<IRummyStructure> Structures { get; }
 
-        public Board(List<RummyStructure> structures)
+        public Board(List<IRummyStructure> structures)
         {
             this.Structures = structures;
+        }
+        public Board()
+        {
         }
     }
 }

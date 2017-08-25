@@ -6,22 +6,22 @@ using RummyEnvironment.Helpers;
 
 namespace RummyEnvironment
 {
-    public class TokensLake
+    public class TokensLake : ITokensLake
     {
-        public List<Token> Tokens { get; private set; }
+        public List<IToken> Tokens { get; private set; }
 
         public TokensLake()
         {
         }
 
-        public TokensLake(List<Token> tokens)
+        public TokensLake(List<IToken> tokens)
         {
             this.Tokens = tokens;
         }
 
         public void CreateNew()
         {
-            this.Tokens = new List<Token>();
+            this.Tokens = new List<IToken>();
 
             List<Color> colors = new List<Color> { Color.Blue, Color.Yellow, Color.Red, Color.Black };
             List<int> numbers = Enumerable.Range(1, 13).ToList();
@@ -44,14 +44,14 @@ namespace RummyEnvironment
             this.Tokens.Shuffle();
         }
 
-        public List<Token> GetToken()
+        public List<IToken> GetToken()
         {
             return this.GrabTokens(1);
         }
 
-        public List<Token> GrabTokens(int numberOfTokens)
+        public List<IToken> GrabTokens(int numberOfTokens)
         {
-            List<Token> tokensToMove = this.Tokens.GetRange(0, numberOfTokens);
+            List<IToken> tokensToMove = this.Tokens.GetRange(0, numberOfTokens);
             this.Tokens.RemoveRange(0, numberOfTokens);
             return tokensToMove;
         }

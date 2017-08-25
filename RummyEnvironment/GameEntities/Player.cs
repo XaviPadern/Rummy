@@ -2,13 +2,13 @@
 
 namespace RummyEnvironment
 {
-    public class Player
+    public class Player : IPlayer
     {
         public string Name { get; }
 
-        public List<Token> Tokens { get; }
+        public List<IToken> Tokens { get; }
 
-        public Player(string name, List<Token> tokens)
+        public Player(string name, List<IToken> tokens)
         {
             this.Name = name;
             this.Tokens = tokens;
