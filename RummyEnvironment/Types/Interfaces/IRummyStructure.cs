@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace RummyEnvironment
 {
     public interface IRummyStructure
     {
         Guid Id { get; }
-        IToken[] Tokens { get; }
+        List<IToken> Tokens { get; }
     }
 }

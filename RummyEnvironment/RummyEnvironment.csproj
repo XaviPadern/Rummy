@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\Interfaces\IRummyStructure.cs" />
     <Compile Include="Types\Interfaces\IToken.cs" />
+    <Compile Include="Types\RummyLadder.cs" />
     <Compile Include="Types\RummyStructure.cs" />
     <Compile Include="Types\Token.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
