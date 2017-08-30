@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RummyEnvironment;
+using RummyEnvironment.Helpers;
 
 namespace TestHelpers
 {
@@ -28,38 +29,22 @@ namespace TestHelpers
             Assert.IsTrue(tokenList.All(token => Token.IsTokenValid(token)));
         }
 
+        // Exactly the same elements (Guid, Color, Number) in the same order.
         public static void AssertTokenListsAreTheSame(List<IToken> list1, List<IToken> list2)
         {
-            Assert.IsTrue(TokenListsComparisonBase(list1, list2));
-            
-            IToken[] array1 = list1.ToArray();
-            IToken[] array2 = list2.ToArray();
-
-            for (int i = 0; i < array1.Length; i++)
-            {
-                Assert.IsTrue(array1[i].IsEqual(array2[i]));
-            }
+            Assert.IsTrue(TokenListsHelper.AreTokenListsExactlyTheSameWithSameOrder(list1, list2));
         }
 
+        // Exactly the same elements (Guid, Color, Number) in different order.
         public static void AssertTokenListsContainsTheSameElements(List<IToken> list1, List<IToken> list2)
         {
-            Assert.IsTrue(TokenListsComparisonBase(list1, list2));
-            Assert.IsTrue(list1.All(s => list2.Count(t => t.IsEqual(s)) == 1));
+            Assert.IsTrue(TokenListsHelper.AreTokenListsExactlyTheSameWithDifferentOrder(list1, list2));
         }
 
-        private static bool TokenListsComparisonBase(List<IToken> list1, List<IToken> list2)
+        // Equivalent elements (Color, Number) in different order.
+        public static void AssertTokenListsContainsEquivalentElements(List<IToken> list1, List<IToken> list2)
         {
-            if ((list1 == null) != (list2 == null))
-            {
-                return false;
-            }
-
-            if (list1 == null)
-            {
-                return true;
-            }
-
-            return list1.Count == list2.Count;
+            Assert.IsTrue(TokenListsHelper.AreTokenListsEquivalentWithDifferentOrder(list1, list2));
         }
     }
 }

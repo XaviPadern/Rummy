@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace RummyEnvironment
 {
-    public interface IToken
+    public interface IToken : ICloneable
     {
         Guid Id { get; }
         Color Color { get; }

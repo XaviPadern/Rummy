@@ -44,6 +44,11 @@ namespace RummyEnvironment
         {
             return this.Color.Equals(token.Color) && this.Number == token.Number;
         }
+        
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
         private static bool IsValidColor(Color color)
         {

@@ -49,6 +49,7 @@
     <Compile Include="GameEntities\Interfaces\IPlayer.cs" />
     <Compile Include="GameEntities\Interfaces\ITokensLake.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
+    <Compile Include="Helpers\TokenListsHelper.cs" />
     <Compile Include="RummyException.cs" />
     <Compile Include="RummyManager.cs" />
     <Compile Include="GameEntities\TokensLake.cs" />
@@ -56,10 +57,14 @@
     <Compile Include="GameEntities\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Types\Interfaces\IOperationResult.cs" />
+    <Compile Include="Types\OperationResult.cs" />
+    <Compile Include="Types\Interfaces\IAddingResult.cs" />
     <Compile Include="Types\Interfaces\IRummyStructure.cs" />
     <Compile Include="Types\Interfaces\IToken.cs" />
     <Compile Include="Types\RummyLadder.cs" />
     <Compile Include="Types\RummyStructure.cs" />
+    <Compile Include="Types\AddingResult.cs" />
     <Compile Include="Types\Token.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
