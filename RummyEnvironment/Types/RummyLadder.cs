@@ -22,17 +22,11 @@ namespace RummyEnvironment
         {
         }
 
-        public override IAddingResult CanAddInStructure(List<IToken> tokensToInsert)
+        public override IActionResult CanAdd(List<IToken> tokensToInsert)
         {
-            IAddingResult result = new AddingResult();
+            IActionResult result = new ActionResult();
 
-            if (!IsTokenSequenceValid(tokensToInsert, 1, RummyLadderMaximumSize - this.Tokens.Count))
-            {
-                // Pending: refine message.
-                throw new RummyException("Not valid token sequence to add in RummyLadder structure: " + tokensToInsert);
-            }
-
-            if (!this.Tokens.First().Color.Equals(tokensToInsert.First().Color))
+            if (!IsTokensToInsertSequenceValid(tokensToInsert, 1, RummyLadderMaximumSize - this.Tokens.Count))
             {
                 return result;
             }
@@ -51,7 +45,7 @@ namespace RummyEnvironment
             if (fitting != ExtremeWhereFits.None)
             {
                 // Source can be located in the extremes.
-                result.AdditionIsPossible = true;
+                result.ActionIsPossible = true;
                 result.NeededExtraTokens = this.GetExtraTokens(tokensToInsert, fitting);
                 return result;
             }
@@ -66,17 +60,17 @@ namespace RummyEnvironment
             if (indexOnDestiny > 2 - tokensToInsert.Count && indexOnDestiny < this.Tokens.Count - 2)
             {
                 // Source can be located inside the destiny (splitting).
-                result.AdditionIsPossible = true;
+                result.ActionIsPossible = true;
                 result.NeededExtraTokens = new List<IToken>();
             }
             return result;
         }
 
-        public override List<IOperationResult> AddInStructure(List<IToken> tokensToInsert, List<IToken> extraTokens)
+        public override List<IOperationResult> Add(List<IToken> tokensToInsert, List<IToken> extraTokens)
         {
-            IAddingResult result = this.CanAddInStructure(tokensToInsert);
+            IActionResult result = this.CanAdd(tokensToInsert);
 
-            if (!result.AdditionIsPossible)
+            if (!result.ActionIsPossible)
             {
                 // Pending: Refine message.
                 throw new RummyException("Validation exception while adding tokens to structure: " + tokensToInsert);
@@ -104,6 +98,68 @@ namespace RummyEnvironment
                 tokensToInsert.AddRange(extraTokens);
             }
             return this.PerformAddInStructure(tokensToInsert);
+        }
+
+        public override IActionResult CanGet(List<IToken> tokensToGet)
+        {
+            IActionResult result = new ActionResult();
+
+            if (!IsTokensToInsertSequenceValid(tokensToGet, 1, this.Tokens.Count - 1))
+            {
+                return result;
+            }
+
+            if (tokensToGet.First().Number < this.Tokens.First().Number || tokensToGet.Last().Number > this.Tokens.Last().Number)
+            {
+                return result;
+            }
+            
+            //Extremes.
+            bool tokensAreInTheExtreme = this.Tokens.First().IsEquivalent(tokensToGet.First()) ||
+                                         this.Tokens.Last().IsEquivalent(tokensToGet.Last());
+
+            if (tokensAreInTheExtreme && tokensToGet.Count <= this.Tokens.Count - 3)
+            {
+                result.ActionIsPossible = true;
+                return result;
+            }
+
+            List<IToken> tempLeftLadder =
+                this.Tokens.GetRange(0, this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.First())));
+            int indexRightLadder = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.Last()));
+            List<IToken> tempRightLadder =
+                this.Tokens.GetRange(indexRightLadder + 1, this.Tokens.Count - indexRightLadder - 1);
+
+            // Calculate if there's any space for the extra tokens.
+            if (tempLeftLadder.First().Number + tempLeftLadder.Count < 4 || tempRightLadder.Last().Number - tempRightLadder.Count > 10)
+            {
+                return result;
+            }
+
+            result.NeededExtraTokens = new List<IToken>();
+
+            int numberToAdd = tempLeftLadder.First().Number - 1;
+
+            // Structure modified: Ladder left.
+            for (int i = tempLeftLadder.Count; i < 3; i++)
+            {
+                result.NeededExtraTokens.Add(new Token(this.Tokens.First().Color, numberToAdd--));
+            }
+
+            numberToAdd = tempRightLadder.Last().Number + 1;
+
+            for (int i = tempRightLadder.Count; i < 3; i++)
+            {
+                result.NeededExtraTokens.Add(new Token(this.Tokens.First().Color, numberToAdd++));
+            }
+
+            result.ActionIsPossible = true;
+            return result;
+        }
+
+        public override List<IOperationResult> Get(List<IToken> tokensToGet)
+        {
+            throw new NotImplementedException();
         }
 
         public override bool IsValidTokenStructure(List<IToken> tokens)
@@ -135,22 +191,14 @@ namespace RummyEnvironment
             else
             {
                 // Middle. The tokensToInsert can have a length of 1 or 2.
-                //int indexInTokens = this.Tokens.IndexOf(tokensToInsert.First()) + 1;
-                int indexInTokens = this.Tokens.FindIndex(Token => Token.Number == tokensToInsert.First().Number) + 1;
-
+                int indexInTokens = this.Tokens.FindIndex(token => token.Number == tokensToInsert.First().Number);
                 int lengthToGet = this.Tokens.Count - indexInTokens;
 
-                modificationOperation.Tokens.RemoveRange(indexInTokens, lengthToGet);
-                
-                List<IToken> tokensForNewStructure = new List<IToken> { tokensToInsert.First() };
-                tokensForNewStructure.AddRange(this.Tokens.GetRange(indexInTokens, lengthToGet));
-
+                List<IToken> tokensForNewStructure = this.Tokens.GetRange(indexInTokens, lengthToGet);
                 creationOperation = new OperationResult(StructureChanges.Created, Guid.NewGuid(), tokensForNewStructure);
-
-                if (tokensToInsert.Count == 2)
-                {
-                    modificationOperation.Tokens.Add(tokensToInsert.Last());
-                }
+                
+                modificationOperation.Tokens.RemoveRange(indexInTokens, lengthToGet);
+                modificationOperation.Tokens.AddRange(tokensToInsert);
             }
 
             // Add OperationResults.
@@ -160,6 +208,21 @@ namespace RummyEnvironment
                 operationResults.Add(creationOperation);
             }
             return operationResults;
+        }
+
+        private bool IsTokensToInsertSequenceValid(List<IToken> tokensToInsert, int minimumSequenceSize, int maximumSequenceSize)
+        {
+            if (!IsTokenSequenceValid(tokensToInsert, minimumSequenceSize, maximumSequenceSize))
+            {
+                // Pending: refine message.
+                throw new RummyException("Not valid token sequence to add in RummyLadder structure: " + tokensToInsert);
+            }
+
+            if (!this.Tokens.First().Color.Equals(tokensToInsert.First().Color))
+            {
+                return false;
+            }
+            return true;
         }
 
         private static bool IsTokenSequenceValid(List<IToken> tokens, int minimumSequenceSize, int maximumSequenceSize)

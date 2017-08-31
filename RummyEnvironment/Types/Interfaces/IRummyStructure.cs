@@ -12,16 +12,24 @@ namespace RummyEnvironment
 
         bool IsValidTokenStructure(List<IToken> tokens);
 
-        IAddingResult CanAddInStructure(IToken tokenToInsert);
+        IActionResult CanAdd(IToken tokenToInsert);
 
-        IAddingResult CanAddInStructure(List<IToken> tokensToInsert);
+        IActionResult CanAdd(List<IToken> tokensToInsert);
 
-        List<IOperationResult> AddInStructure(IToken tokenToInsert);
+        List<IOperationResult> Add(IToken tokenToInsert);
 
-        List<IOperationResult> AddInStructure(IToken tokenToInsert, List<IToken> extraTokens);
+        List<IOperationResult> Add(IToken tokenToInsert, List<IToken> extraTokens);
 
-        List<IOperationResult> AddInStructure(List<IToken> tokensToInsert);
+        List<IOperationResult> Add(List<IToken> tokensToInsert);
 
-        List<IOperationResult> AddInStructure(List<IToken> tokensToInsert, List<IToken> extraTokens);
+        List<IOperationResult> Add(List<IToken> tokensToInsert, List<IToken> extraTokens);
+
+        IActionResult CanGet(IToken tokenToGet);
+
+        IActionResult CanGet(List<IToken> tokensToGet);
+
+        List<IOperationResult> Get(IToken tokenToGet);
+
+        List<IOperationResult> Get(List<IToken> tokensToGet);
     }
 }

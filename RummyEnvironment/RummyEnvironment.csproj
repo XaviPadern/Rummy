@@ -59,12 +59,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\Interfaces\IOperationResult.cs" />
     <Compile Include="Types\OperationResult.cs" />
-    <Compile Include="Types\Interfaces\IAddingResult.cs" />
+    <Compile Include="Types\Interfaces\IActionResult.cs" />
     <Compile Include="Types\Interfaces\IRummyStructure.cs" />
     <Compile Include="Types\Interfaces\IToken.cs" />
     <Compile Include="Types\RummyLadder.cs" />
     <Compile Include="Types\RummyStructure.cs" />
-    <Compile Include="Types\AddingResult.cs" />
+    <Compile Include="Types\ActionResult.cs" />
     <Compile Include="Types\Token.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace RummyEnvironment
 {
-    public interface IAddingResult
+    public interface IActionResult
     {
-        bool AdditionIsPossible { get; set; }
+        bool ActionIsPossible { get; set; }
 
         List<IToken> NeededExtraTokens { get; set; }
     }
