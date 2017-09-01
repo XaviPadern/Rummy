@@ -6,7 +6,6 @@ namespace RummyEnvironment
     public enum StructureChanges
     {
         None,
-        Retrieved,
         Modified,
         Created
     }

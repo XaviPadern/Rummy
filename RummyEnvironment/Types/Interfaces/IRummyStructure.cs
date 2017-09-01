@@ -30,6 +30,10 @@ namespace RummyEnvironment
 
         List<IOperationResult> Get(IToken tokenToGet);
 
+        List<IOperationResult> Get(IToken tokensToGet, List<IToken> extraTokens);
+
         List<IOperationResult> Get(List<IToken> tokensToGet);
+
+        List<IOperationResult> Get(List<IToken> tokensToGet, List<IToken> extraTokens);
     }
 }

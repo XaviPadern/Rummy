@@ -922,9 +922,6 @@ namespace RummyEnvironmentTest
 		public void RummyLadder_GetTokenListInvalidColors_ExceptionThrown()
 		{
 			// Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-			this.AssertTokensCanBeGet(tokensToGet, desiredResult);
-
-			// Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
 			this.InitializeDummyTokensAsValidLadder();
 			RummyLadder ladder = new RummyLadder(this.dummyTokens);
 
@@ -933,15 +930,12 @@ namespace RummyEnvironmentTest
 				new Token(Color.Blue, 4), new Token(Color.Yellow, 5), new Token(Color.Blue, 6)
 			};
 
-			AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));
+			AssertHelpers.AssertThrows<RummyException>(() => ladder.CanGet(tokensToGet));
 		}
 
 		[TestMethod]
 		public void RummyLadder_GetTokenListInvalidSequence_ExceptionThrown()
 		{
-			// Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-			this.AssertTokensCanBeGet(tokensToGet, desiredResult);
-
 			// Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
 			this.InitializeDummyTokensAsValidLadder();
 			RummyLadder ladder = new RummyLadder(this.dummyTokens);
@@ -951,7 +945,7 @@ namespace RummyEnvironmentTest
 				new Token(Color.Blue, 4), new Token(Color.Blue, 6), new Token(Color.Blue, 7)
 			};
 
-			AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));
+			AssertHelpers.AssertThrows<RummyException>(() => ladder.CanGet(tokensToGet));
 		}
 
 		[TestMethod]
@@ -1241,7 +1235,8 @@ namespace RummyEnvironmentTest
 
 			IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);
 
-			this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
+		    // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+			this.AssertTokensCanBeGet(tokensToGet, desiredResult);
 		}
 
 		[TestMethod]
@@ -1259,8 +1254,9 @@ namespace RummyEnvironmentTest
 
 			IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);
 
-			this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
-		}
+		    // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+		    this.AssertTokensCanBeGet(tokensToGet, desiredResult);
+        }
                                                     
 		#endregion
 

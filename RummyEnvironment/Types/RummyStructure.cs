@@ -67,8 +67,17 @@ namespace RummyEnvironment
         {
             return this.Get(new List<IToken> { tokenToGet });
         }
+        public List<IOperationResult> Get(IToken tokensToGet, List<IToken> extraTokens)
+        {
+            return this.Get(new List<IToken> { tokensToGet }, extraTokens);
+        }
 
-        public abstract List<IOperationResult> Get(List<IToken> tokensToGet);
+        public List<IOperationResult> Get(List<IToken> tokensToGet)
+        {
+            return this.Get(tokensToGet, new List<IToken>());
+        }
+
+        public abstract List<IOperationResult> Get(List<IToken> tokensToGet, List<IToken> extraTokens);
 
         protected void CheckTokenStructure(List<IToken> tokens)
         {

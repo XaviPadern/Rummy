@@ -82,20 +82,19 @@ namespace RummyEnvironment
                 throw new RummyException("Provided extra tokens are not the needed ones: " + tokensToInsert);
             }
 
-            // For extremes
-            if (extraTokens.Count < 1)
+            // Not in the extremes
+            if (extraTokens.Count > 0)
             {
-                return this.PerformAddInStructure(tokensToInsert);
-            }
-
-            // Add the desired tokens + extra tokens.
-            if (extraTokens.First().Number < tokensToInsert.First().Number)
-            {
-                tokensToInsert.InsertRange(0, extraTokens);
-            }
-            else
-            {
-                tokensToInsert.AddRange(extraTokens);
+                // Add the desired tokens + extra tokens.
+                if (extraTokens.First().Number < tokensToInsert.First().Number)
+                {
+                    tokensToInsert.InsertRange(0, extraTokens);
+                }
+                else
+                {
+                    tokensToInsert.AddRange(extraTokens);
+                }
+                
             }
             return this.PerformAddInStructure(tokensToInsert);
         }
@@ -124,11 +123,9 @@ namespace RummyEnvironment
                 return result;
             }
 
-            List<IToken> tempLeftLadder =
-                this.Tokens.GetRange(0, this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.First())));
-            int indexRightLadder = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.Last()));
-            List<IToken> tempRightLadder =
-                this.Tokens.GetRange(indexRightLadder + 1, this.Tokens.Count - indexRightLadder - 1);
+            List<List<IToken>> resultingLadderLists = this.GetResultingLadderLists(tokensToGet);
+            List<IToken> tempLeftLadder = resultingLadderLists.First();
+            List<IToken> tempRightLadder = resultingLadderLists.Last();
 
             // Calculate if there's any space for the extra tokens.
             if (tempLeftLadder.First().Number + tempLeftLadder.Count < 4 || tempRightLadder.Last().Number - tempRightLadder.Count > 10)
@@ -157,9 +154,36 @@ namespace RummyEnvironment
             return result;
         }
 
-        public override List<IOperationResult> Get(List<IToken> tokensToGet)
+        public override List<IOperationResult> Get(List<IToken> tokensToGet, List<IToken> extraTokens)
         {
-            throw new NotImplementedException();
+            List<IOperationResult> operationResults = new List<IOperationResult>();
+
+            IActionResult result = this.CanGet(tokensToGet);
+
+            if (!result.ActionIsPossible)
+            {
+                // Pending: Refine message.
+                throw new RummyException("Validation exception while getting tokens from structure: " + tokensToGet);
+            }
+
+            if (!TokenListsHelper.AreTokenListsEquivalentWithSameOrder(result.NeededExtraTokens, tokensToGet))
+            {
+                // Pending: Refine message.
+                throw new RummyException("Provided extra tokens are not the needed ones: " + tokensToGet);
+            }
+
+            List<List<IToken>> resultingLadderLists = this.GetResultingLadderLists(tokensToGet);
+            List<List<IToken>> extraTokenLists = this.SplitExtraTokensInLists(extraTokens);
+
+
+            OperationResult modificationOperation = new OperationResult(StructureChanges.Modified, this.Id, this.Tokens.Clone().ToList());
+
+            foreach (List<IToken> extraTokenList in extraTokenLists)
+            {
+                if ()
+            }
+
+            return null;
         }
 
         public override bool IsValidTokenStructure(List<IToken> tokens)
@@ -208,6 +232,38 @@ namespace RummyEnvironment
                 operationResults.Add(creationOperation);
             }
             return operationResults;
+        }
+
+        private List<List<IToken>> GetResultingLadderLists(List<IToken> tokensToGet)
+        {
+            int indexRightLadder = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.Last()));
+
+            return new List<List<IToken>>()
+            {
+                this.Tokens.GetRange(0, this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.First()))),
+                this.Tokens.GetRange(indexRightLadder + 1, this.Tokens.Count - indexRightLadder - 1)
+            };
+        }
+        
+        private List<List<IToken>> SplitExtraTokensInLists(List<IToken> extraTokens)
+        {
+            List<List<IToken>> splittedTokens = new List<List<IToken>>();
+
+            int lastNumber = 0;
+            List<IToken> currentList = new List<IToken>();
+
+            foreach (IToken token in extraTokens)
+            {
+                if (token.Number < lastNumber)
+                {
+                    splittedTokens.Add((List<IToken>)currentList.Clone());
+                    currentList = new List<IToken>();
+                }
+                currentList.Add(token);
+                lastNumber++;
+            }
+            splittedTokens.Add((List<IToken>)currentList.Clone());
+            return splittedTokens;
         }
 
         private bool IsTokensToInsertSequenceValid(List<IToken> tokensToInsert, int minimumSequenceSize, int maximumSequenceSize)
