@@ -166,7 +166,7 @@ namespace RummyEnvironment
                 throw new RummyException("Validation exception while getting tokens from structure: " + tokensToGet);
             }
 
-            if (!TokenListsHelper.AreTokenListsEquivalentWithSameOrder(result.NeededExtraTokens, tokensToGet))
+            if (!TokenListsHelper.AreTokenListsEquivalentWithSameOrder(result.NeededExtraTokens, extraTokens))
             {
                 // Pending: Refine message.
                 throw new RummyException("Provided extra tokens are not the needed ones: " + tokensToGet);
