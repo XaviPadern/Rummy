@@ -87,6 +87,7 @@ namespace RummyEnvironmentTest
         [TestMethod]
         public void RummyLadder_ModifyWithOnlySingleToken_ExceptionThrown()
         {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
             RummyLadder ladder = new RummyLadder(this.dummyTokens);
 
@@ -99,6 +100,7 @@ namespace RummyEnvironmentTest
         [TestMethod]
         public void RummyLadder_ModifyWithOnlyTwoTokens_ExceptionThrown()
         {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
             RummyLadder ladder = new RummyLadder(this.dummyTokens);
 
@@ -111,6 +113,7 @@ namespace RummyEnvironmentTest
         [TestMethod]
         public void RummyLadder_ModifyWithBrokenLadder_ExceptionThrown()
         {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
             RummyLadder ladder = new RummyLadder(this.dummyTokens);
 
@@ -123,6 +126,7 @@ namespace RummyEnvironmentTest
         [TestMethod]
         public void RummyLadder_ModifyWithInvalidColors_ExceptionThrown()
         {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
             RummyLadder ladder = new RummyLadder(this.dummyTokens);
 
@@ -518,6 +522,27 @@ namespace RummyEnvironmentTest
         #region Add_OnlyOneToken
 
         [TestMethod]
+        public void RummyLadder_AddOnlyOneTokenInvalidExtraTokensSequence_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToInsert = new List<IToken>()
+            {
+                new Token(Color.Blue, 1)
+            };
+
+            List<IToken> extraTokens = new List<IToken>()
+            {
+                new Token(Color.Blue, 2),
+                new Token(Color.Black, 3)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToInsert, extraTokens));
+        }
+
+        [TestMethod]
         public void RummyLadder_AddOnlyOneTokenNotPossible_ExceptionThrown()
         {
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
@@ -532,8 +557,9 @@ namespace RummyEnvironmentTest
             AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToInsert));
         }
 
+
         [TestMethod]
-        public void RummyLadder_AddOnlyOneTokenInvalidExtraTokens_ExceptionThrown()
+        public void RummyLadder_AddOnlyOneTokenDifferentExtraTokens_ExceptionThrown()
         {
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
@@ -541,12 +567,13 @@ namespace RummyEnvironmentTest
 
             List<IToken> tokensToInsert = new List<IToken>()
             {
-                new Token(Color.Blue, 2)
+                new Token(Color.Blue, 1)
             };
 
             List<IToken> extraTokens = new List<IToken>()
             {
-                new Token(Color.Black, 3)
+                new Token(Color.Blue, 3),
+                new Token(Color.Blue, 4)
             };
 
             AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToInsert, extraTokens));
@@ -620,7 +647,7 @@ namespace RummyEnvironmentTest
         }
 
         [TestMethod]
-        public void RummyLadder_AddTokenListInvalidExtraTokens_ExceptionThrown()
+        public void RummyLadder_AddTokenListInvalidExtraTokensSequence_ExceptionThrown()
         {
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
@@ -635,6 +662,44 @@ namespace RummyEnvironmentTest
             List<IToken> extraTokens = new List<IToken>()
             {
                 new Token(Color.Black, 3)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToInsert, extraTokens));
+        }
+
+        [TestMethod]
+        public void RummyLadder_AddTokenListNotPossible_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToInsert = new List<IToken>()
+            {
+                new Token(Color.Blue, 8),
+                new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToInsert));
+        }
+
+        [TestMethod]
+        public void RummyLadder_AddTokenListDifferentExtraTokens_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToInsert = new List<IToken>()
+            {
+                new Token(Color.Blue, 1),
+                new Token(Color.Blue, 2)
+            };
+
+            List<IToken> extraTokens = new List<IToken>()
+            {
+                new Token(Color.Blue, 4)
             };
 
             AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToInsert, extraTokens));
@@ -1257,41 +1322,480 @@ namespace RummyEnvironmentTest
 		    // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
 		    this.AssertTokensCanBeGet(tokensToGet, desiredResult);
         }
+
+        #endregion
+
+        #region Get_OnlyOneToken
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInvalidExtraTokensSequence_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet = new List<IToken>()
+            {
+                new Token(Color.Blue, 6)
+            };
+
+            List<IToken> extraTokens = new List<IToken>()
+            {
+                new Token(Color.Black, 3)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToGet, extraTokens));
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenNotPossible_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet = new List<IToken>()
+            {
+                new Token(Color.Black, 4)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenDifferentExtraTokens_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet = new List<IToken>()
+            {
+                new Token(Color.Blue, 6)
+            };
+
+            List<IToken> extraTokens = new List<IToken>()
+            {
+                new Token(Color.Black, 3)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToGet, extraTokens));
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithoutExtraTokens1_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            
+            this.AssertTokensAreGet(new Token(Color.Blue, 4), false);         
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithoutExtraTokens2_Succeeds()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 1),
+                new Token(Color.Blue, 2),
+                new Token(Color.Blue, 3),
+                new Token(Color.Blue, 4)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 1), false);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithoutExtraTokens1_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 9), false);
+        }
+        
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithoutExtraTokens2_Succeeds()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11),
+                new Token(Color.Blue, 12),
+                new Token(Color.Blue, 13)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 13), false);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInMiddleWithoutExtraTokens_Succeeds()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 7),
+                new Token(Color.Blue, 8),
+                new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11),
+                new Token(Color.Blue, 12),
+                new Token(Color.Blue, 13)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 10), true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithExtraTokens1_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> extraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 2),
+                new Token(Color.Blue, 3)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 5), extraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithExtraTokens2_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> extraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 3)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 6), extraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithExtraTokens1_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> extraTokens = new List<IToken>()
+            {
+                new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 8), extraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithExtraTokens2_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> extraTokens = new List<IToken>()
+            {
+                    new Token(Color.Blue, 10)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 7), extraTokens, true);
+        }
+
+        #endregion
+
+        #region Get_TokenList
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInvalidTokens_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 4),
+                new Token(Color.Black, 5)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInvalidExtraTokensSequence_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 5),
+                new Token(Color.Blue, 6)
+            };
+
+            List<IToken> extraTokens = new List<IToken>
+            {
+                    new Token(Color.Black, 2),
+                    new Token(Color.Blue, 3)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToGet, extraTokens));
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListNotPossible_ExceptionThrown()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet = new List<IToken>()
+            {
+                new Token(Color.Black, 4),
+                new Token(Color.Black, 5)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListDifferentExtraTokens_ExceptionThrown()
+        {
+          // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet = new List<IToken>()
+            {
+                new Token(Color.Blue, 5),
+                new Token(Color.Blue, 6)
+            };
+
+            List<IToken> extraTokens = new List<IToken>()
+            {
+                    new Token(Color.Black, 2),
+                    new Token(Color.Black, 3)
+            };
+
+            AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToGet, extraTokens));
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInInitialExtremeWithoutExtraTokens1_Succeed()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, false);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInInitialExtremeWithoutExtraTokens2_Succeed()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 1), new Token(Color.Blue, 2), new Token(Color.Blue, 3),
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6)
+            } ;
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 1), new Token(Color.Blue, 2), new Token(Color.Blue, 3)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, false);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInFinalExtremeWithoutExtraTokens1_Succeed()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, false);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInFinalExtremeWithoutExtraTokens2_Succeed()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11), new Token(Color.Blue, 12), new Token(Color.Blue, 13)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 11), new Token(Color.Blue, 12), new Token(Color.Blue, 13)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, false);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInMiddleWithoutExtraTokens_Succeed()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10), new Token(Color.Blue, 11)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInInitialExtremeWithExtraTokens1_Succeed()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10), new Token(Color.Blue, 11), new Token(Color.Blue, 12)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7)
+            };
+
+            List<IToken> desiredExtraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 2),
+                new Token(Color.Blue, 3)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, desiredExtraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInInitialExtremeWithExtraTokens2_Succeed()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10), new Token(Color.Blue, 11), new Token(Color.Blue, 12)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 6), new Token(Color.Blue, 7), new Token(Color.Blue, 8)
+            };
+
+            List<IToken> desiredExtraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 3)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, desiredExtraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInFinalExtremeWithExtraTokens1_Succeed()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10), new Token(Color.Blue, 11)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10)
+            };
+
+            List<IToken> desiredExtraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 12),
+                new Token(Color.Blue, 13)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, desiredExtraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInFinalExtremeWithExtraTokens2_Succeed()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10), new Token(Color.Blue, 11)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)
+            };
+
+            List<IToken> desiredExtraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 12)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, desiredExtraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInMiddleWithExtraTokens1_Succeed()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7), new Token(Color.Blue, 8)
+            };
+
+            List<IToken> desiredExtraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 2), new Token(Color.Blue, 3), new Token(Color.Blue, 10), new Token(Color.Blue, 11)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, desiredExtraTokens, true);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInMiddleWithExtraTokens2_Succeed()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 6), new Token(Color.Blue, 7)
+            };
+
+            List<IToken> desiredExtraTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 3), new Token(Color.Blue, 10)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, desiredExtraTokens, true);
+        }
                                                     
-		#endregion
-
-        #region Get_OnlyOneToken          [TestMethod]         public void RummyLadder_GetOnlyOneTokenNotPossible_ExceptionThrown()         {             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.InitializeDummyTokensAsValidLadder();             RummyLadder ladder = new RummyLadder(this.dummyTokens);              List<IToken> tokensToGet = new List<IToken>()             {                 new Token(Color.Black, 4)             };              AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));         } 
-// Aqui m’he questa:
-// Invalid tokens to get
-// invalid extra tokens seq
-// extra tokens does not fit
-// no valid query
-
-        [TestMethod]         public void RummyLadder_GetOnlyOneTokenDifferentExtraTokens_ExceptionThrown()         {             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.InitializeDummyTokensAsValidLadder();             RummyLadder ladder = new RummyLadder(this.dummyTokens);              List<IToken> tokensToGet = new List<IToken>()             {                 new Token(Color.Blue, 6)             };              List<IToken> extraTokens = new List<IToken>()             {                 new Token(Color.Black, 3)             };              AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToGet, extraTokens));         }
-         [TestMethod]         public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithoutExtraTokens1_Succeeds()         {             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(new Token(Color.Blue, 4), false);                  }          [TestMethod]         public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithoutExtraTokens2_Succeeds()         {
-              List<IToken> structureTokens = new List<IToken>()             {                 new Token(Color.Blue, 1),
-                  new Token(Color.Blue, 2),
-                    new Token(Color.Blue, 3),
-                new Token(Color.Blue, 4)             };
-             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(structureTokens , new Token(Color.Blue, 1), false);         }          [TestMethod]         public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithoutExtraTokens1_Succeeds()         {             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(new Token(Color.Blue, 9), false);        }                  [TestMethod]         public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithoutExtraTokens2_Succeeds()         {             List<IToken> structureTokens = new List<IToken>()             {                 new Token(Color.Blue, 10),
-                  new Token(Color.Blue, 11),
-                    new Token(Color.Blue, 12),
-                new Token(Color.Blue, 13)             };
-             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(structureTokens , new Token(Color.Blue, 13), false);         }          [TestMethod]         public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithExtraTokens1_Succeeds()         {             List<IToken> extraTokens = new List<IToken>()             {
-                    new Token(Color.Blue, 2),                 new Token(Color.Blue, 3)             };              // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(new Token(Color.Blue, 5), extraTokens, false)         }          [TestMethod]         public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithExtraTokens2_Succeeds()         {             List<IToken> extraTokens = new List<IToken>()             {                 new Token(Color.Blue, 3)             };              // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(new Token(Color.Blue, 6), extraTokens, false);         }          [TestMethod]         public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithExtraTokens1_Succeeds()         {             List<IToken> extraTokens = new List<IToken>()             {
-                    new Token(Color.Blue, 10),                 new Token(Color.Blue, 11)             };              // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(new Token(Color.Blue, 8), extraTokens, false)         }          [TestMethod]         public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithExtraTokens2_Succeeds()         {             List<IToken> extraTokens = new List<IToken>()             {
-                    new Token(Color.Blue, 10)             };              // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensAreGet(new Token(Color.Blue, 7), extraTokens, false)         }       #endregion          #region CanGet_TokenList        [TestMethod]        public void RummyLadder_GetTokenListInvalidTokens_ExceptionThrown()         {           // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.InitializeDummyTokensAsValidLadder();             RummyLadder ladder = new RummyLadder(this.dummyTokens);              List<IToken> tokensToGet = new List<IToken>()             {                 new Token(Color.Blue, 4),                 new Token(Color.Black, 5)             };
-             AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));         }
-
-        [TestMethod]        public void RummyLadder_GetTokenListInvalidExtraTokens_ExceptionThrown()        {           // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.InitializeDummyTokensAsValidLadder();             RummyLadder ladder = new RummyLadder(this.dummyTokens);              List<IToken> tokensToGet = new List<IToken>()             {                 new Token(Color.Blue, 5),                 new Token(Color.Blue, 6)             };              List<IToken> extraTokens = new List<IToken>()             {
-                    new Token(Color.Black, 2),
-                    new Token(Color.Blue, 3)             };              AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToGet, extraTokens));        }
-        [TestMethod]        public void RummyLadder_GetTokenListDifferentExtraTokens_ExceptionThrown()      {           // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.InitializeDummyTokensAsValidLadder();             RummyLadder ladder = new RummyLadder(this.dummyTokens);              List<IToken> tokensToGet = new List<IToken>()             {                 new Token(Color.Blue, 5),                 new Token(Color.Blue, 6)             };              List<IToken> extraTokens = new List<IToken>()             {
-                    new Token(Color.Black, 2),
-                    new Token(Color.Black, 3)             };              AssertHelpers.AssertThrows<RummyException>(() => ladder.Add(tokensToGet, extraTokens));       } 
-        [TestMethod]        public void RummyLadder_GetTokenListNotPossible_ExceptionThrown()       {           // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.InitializeDummyTokensAsValidLadder();             RummyLadder ladder = new RummyLadder(this.dummyTokens);              List<IToken> tokensToGet = new List<IToken>()             {                 new Token(Color.Black, 4),
-                new Token(Color.Black, 5)             };              AssertHelpers.AssertThrows<RummyException>(() => ladder.Get(tokensToGet));        }
-        [TestMethod]        public void RummyLadder_GetTokenListInInitialExtremeWithoutExtraTokens1_Succeed()       {           IActionResult desiredResult = new ActionResult(true, new List<IToken>());           List<IToken> tokensToGet = new List<IToken>             {               new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6)            } ;             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensCanBeGet(tokensToGet, desiredResult);      }       [TestMethod]        public void RummyLadder_GetTokenListInInitialExtremeWithoutExtraTokens2_Succeed()       {           IActionResult desiredResult = new ActionResult(true, new List<IToken>());           List<IToken> structureTokens = new List<IToken>             {               new Token(Color.Blue, 1), new Token(Color.Blue, 2), new Token(Color.Blue, 3),               new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6)            } ;             List<IToken> tokensToGet = new List<IToken>             {               new Token(Color.Blue, 1), new Token(Color.Blue, 2), new Token(Color.Blue, 3)            } ;              this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);        }       [TestMethod]        public void RummyLadder_GetTokenListInFinalExtremeWithoutExtraTokens1_Succeed()         {           IActionResult desiredResult = new ActionResult(true, new List<IToken>());           List<IToken> tokensToGet = new List<IToken>             {               new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)            } ;             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensCanBeGet(tokensToGet, desiredResult);      }       [TestMethod]        public void RummyLadder_GetTokenListInFinalExtremeWithoutExtraTokens2_Succeed()         {           IActionResult desiredResult = new ActionResult(true, new List<IToken>());           List<IToken> structureTokens = new List<IToken>             {               new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),              new Token(Color.Blue, 11), new Token(Color.Blue, 12), new Token(Color.Blue, 13)             } ;             List<IToken> tokensToGet = new List<IToken>             {               new Token(Color.Blue, 11), new Token(Color.Blue, 12), new Token(Color.Blue, 13)             } ;             this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);         }       [TestMethod]        public void RummyLadder_GetTokenListInInitialExtremeWithExtraTokens1_Succeed()      {           List<IToken> structureTokens = new List<IToken>             {               new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),               new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),                 new Token(Color.Blue, 10), new Token(Color.Blue, 11), new Token(Color.Blue, 12)           } ;             List<IToken> tokensToGet = new List<IToken>             {                 new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7)             };           List<IToken> desiredExtraTokens = new List<IToken>          {               new Token(Color.Blue, 2),               new Token(Color.Blue, 3)            } ;             IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);           this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);         }       [TestMethod]        public void RummyLadder_GetTokenListInInitialExtremeWithExtraTokens2_Succeed()      {           List<IToken> structureTokens = new List<IToken>             {               new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),               new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),               new Token(Color.Blue, 10), new Token(Color.Blue, 11), new Token(Color.Blue, 12)             } ;             List<IToken> tokensToGet = new List<IToken>             {                 new Token(Color.Blue, 6), new Token(Color.Blue, 7), new Token(Color.Blue, 8)          } ;             List<IToken> desiredExtraTokens = new List<IToken>          {               new Token(Color.Blue, 3)            } ;                                                                 IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);           this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);         }       [TestMethod]        public void RummyLadder_GetTokenListInFinalExtremeWithExtraTokens1_Succeed()        {           List<IToken> structureTokens = new List<IToken>             {               new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),               new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),               new Token(Color.Blue, 10), new Token(Color.Blue, 11)            } ;             List<IToken> tokensToGet = new List<IToken>             {                 new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10)             } ;             List<IToken> desiredExtraTokens = new List<IToken>          {               new Token(Color.Blue, 12),                 new Token(Color.Blue, 13)            } ;                                                                 IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);           this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);         }       [TestMethod]        public void RummyLadder_GetTokenListInFinalExtremeWithExtraTokens2_Succeed()        {           List<IToken> structureTokens = new List<IToken>             {               new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),               new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),               new Token(Color.Blue, 10), new Token(Color.Blue, 11)            } ;             List<IToken> tokensToGet = new List<IToken>             {                 new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)          } ;             List<IToken> desiredExtraTokens = new List<IToken>          {               new Token(Color.Blue, 12)           } ;                                                                 IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);           this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);         }       [TestMethod]        public void RummyLadder_GetTokenListInMiddleWithExtraTokens1_Succeed()      {           List<IToken> tokensToGet = new List<IToken>             {                 new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7), new Token(Color.Blue, 8)            } ;             List<IToken> desiredExtraTokens = new List<IToken>          {               new Token(Color.Blue, 2), new Token(Color.Blue, 3), new Token(Color.Blue, 10), new Token(Color.Blue, 11)            } ;             IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);           // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensCanBeGet(tokensToGet, desiredResult);      }       [TestMethod]        public void RummyLadder_GetTokenListInMiddleWithExtraTokens2_Succeed()      {           List<IToken> tokensToGet = new List<IToken>             {               new Token(Color.Blue, 6), new Token(Color.Blue, 7)          } ;             List<IToken> desiredExtraTokens = new List<IToken>          {               new Token(Color.Blue, 3), new Token(Color.Blue, 10)             } ;             IActionResult desiredResult = new ActionResult(true, desiredExtraTokens);           // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).             this.AssertTokensCanBeGet(tokensToGet, desiredResult);         }                                                            #endregion
+        #endregion
 
 		private void AssertTokensCanBeAdded(object tokenToInsert, IActionResult desiredResult)
         {
@@ -1389,6 +1893,53 @@ namespace RummyEnvironmentTest
 
             // All the tokens to insert have to be present in the operations:
             Assert.IsTrue(tokensToInsert.All(s => allTokensFromOperations.Count(t => t.IsEqual(s)) == 1));
+
+            // All the extra tokens have to be present in the operations:
+            Assert.IsTrue(extraTokens.All(s => allTokensFromOperations.Count(t => t.IsEqual(s)) == 1));
+        }
+
+        private void AssertTokensAreGet(object tokenToGet, bool creationOperationIsExpected)
+        {
+            AssertTokensAreGet(tokenToGet, new List<IToken>(), creationOperationIsExpected);
+        }
+
+        private void AssertTokensAreGet(object tokenToGet, List<IToken> extraTokens, bool creationOperationIsExpected)
+        {
+            RummyLadder ladder = new RummyLadder(this.dummyTokens);
+
+            List<IToken> tokensToGet;
+
+            if (tokenToGet.GetType() == typeof(Token))
+            {
+                tokensToGet = new List<IToken> { (IToken)tokenToGet };
+            }
+            else
+            {
+                tokensToGet = (List<IToken>)tokenToGet;
+            }
+
+            List<IOperationResult> operationResults = ladder.Get(tokensToGet, extraTokens);
+            Assert.IsNotNull(operationResults);
+
+            List<IToken> allTokensFromOperations = new List<IToken>();
+
+            Assert.AreEqual(StructureChanges.Retrieving, operationResults.First().StructureChanges);
+            Assert.AreEqual(Guid.Empty, operationResults.First().StructureId);
+            allTokensFromOperations.AddRange(operationResults.First().Tokens);
+
+            Assert.AreEqual(StructureChanges.Modified, operationResults[1].StructureChanges);
+            Assert.AreEqual(ladder.Id, operationResults[1].StructureId);
+            allTokensFromOperations.AddRange(operationResults[1].Tokens);
+
+            if (creationOperationIsExpected)
+            {
+                Assert.AreEqual(StructureChanges.Created, operationResults.Last().StructureChanges);
+                Assert.AreNotEqual(ladder.Id, operationResults.Last().StructureId);
+                allTokensFromOperations.AddRange(operationResults.Last().Tokens);
+            }
+
+            // All the initial tokens have to be present in the operations:
+            Assert.IsTrue(ladder.Tokens.All(s => allTokensFromOperations.Count(t => t.IsEqual(s)) == 1));
 
             // All the extra tokens have to be present in the operations:
             Assert.IsTrue(extraTokens.All(s => allTokensFromOperations.Count(t => t.IsEqual(s)) == 1));

@@ -142,6 +142,7 @@ namespace RummyEnvironment
             {
                 result.NeededExtraTokens.Add(new Token(this.Tokens.First().Color, numberToAdd--));
             }
+            result.NeededExtraTokens.Reverse();
 
             numberToAdd = tempRightLadder.Last().Number + 1;
 
@@ -175,15 +176,69 @@ namespace RummyEnvironment
             List<List<IToken>> resultingLadderLists = this.GetResultingLadderLists(tokensToGet);
             List<List<IToken>> extraTokenLists = this.SplitExtraTokensInLists(extraTokens);
 
+            // Create the retrieving operation:
+            List<IToken> retrievedTokens = new List<IToken>();
 
-            OperationResult modificationOperation = new OperationResult(StructureChanges.Modified, this.Id, this.Tokens.Clone().ToList());
-
-            foreach (List<IToken> extraTokenList in extraTokenLists)
+            foreach (IToken token in tokensToGet)
             {
-                if ()
+                List<IToken> matchingTokens = this.Tokens.Where(tok => token.IsEquivalent(tok)).ToList();
+
+                if (matchingTokens.Count != 1)
+                {
+                    throw new RummyException("More than 1 token found!");
+                }
+                retrievedTokens.Add(matchingTokens.First());
             }
 
-            return null;
+            OperationResult retrievingOperation = new OperationResult(StructureChanges.Retrieving, Guid.Empty, retrievedTokens);
+            OperationResult creationOperation = null;
+
+            if (extraTokens.Count > 0)
+            {
+                if (extraTokenLists.Count == 1)
+                {
+                    if (extraTokenLists.First().Last().Number == resultingLadderLists.First().First().Number - 1)
+                    {
+                        resultingLadderLists.First().InsertRange(0, extraTokenLists.First());
+                    }
+                    else if (extraTokenLists.First().First().Number == resultingLadderLists.Last().Last().Number + 1)
+                    {
+                        resultingLadderLists.First().AddRange(extraTokenLists.First());
+                    }
+                    else
+                    {
+                        throw new RummyException("Cannot locate the extra tokens in the current position!");
+                    }
+                }
+                else
+                {
+                    if (extraTokenLists.First().Last().Number == resultingLadderLists.First().First().Number - 1 &&
+                        extraTokenLists.Last().First().Number == resultingLadderLists.Last().Last().Number + 1)
+                    {
+                        resultingLadderLists.First().InsertRange(0, extraTokenLists.First());
+                        resultingLadderLists.Last().AddRange(extraTokenLists.Last());
+                    }
+                    else
+                    {
+                        throw new RummyException("Cannot locate the extra tokens in the current position!");
+                    }
+                }
+            }
+
+            OperationResult modificationOperation = new OperationResult(StructureChanges.Modified, this.Id, resultingLadderLists.First());
+
+            if (resultingLadderLists.Count == 2)
+            {
+                creationOperation = new OperationResult(StructureChanges.Created, Guid.NewGuid(), resultingLadderLists.Last());
+            }
+
+            operationResults.Add(retrievingOperation);
+            operationResults.Add(modificationOperation);
+            if (creationOperation != null)
+            {
+                operationResults.Add(creationOperation);
+            }
+            return operationResults;
         }
 
         public override bool IsValidTokenStructure(List<IToken> tokens)
@@ -236,12 +291,29 @@ namespace RummyEnvironment
 
         private List<List<IToken>> GetResultingLadderLists(List<IToken> tokensToGet)
         {
-            int indexRightLadder = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.Last()));
+            int indexLeft = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.First()));
+            int indexRight = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.Last()));
+
+            if (indexLeft == 0)
+            {
+                return new List<List<IToken>>
+                {
+                    this.Tokens.GetRange(indexRight + 1, this.Tokens.Count - tokensToGet.Count)
+                };
+            }
+
+            if (indexRight == this.Tokens.Count - 1)
+            {
+                return new List<List<IToken>>
+                {
+                    this.Tokens.GetRange(0, this.Tokens.Count - tokensToGet.Count)
+                };
+            }
 
             return new List<List<IToken>>()
             {
-                this.Tokens.GetRange(0, this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.First()))),
-                this.Tokens.GetRange(indexRightLadder + 1, this.Tokens.Count - indexRightLadder - 1)
+                this.Tokens.GetRange(0, indexLeft),
+                this.Tokens.GetRange(indexRight + 1, this.Tokens.Count - indexRight - 1)
             };
         }
         
@@ -249,18 +321,23 @@ namespace RummyEnvironment
         {
             List<List<IToken>> splittedTokens = new List<List<IToken>>();
 
-            int lastNumber = 0;
+            if (extraTokens.Count == 0)
+            {
+                return splittedTokens;
+            }
+
+            int lastNumber = extraTokens.First().Number - 1;
             List<IToken> currentList = new List<IToken>();
 
             foreach (IToken token in extraTokens)
             {
-                if (token.Number < lastNumber)
+                if (token.Number != lastNumber + 1)
                 {
                     splittedTokens.Add((List<IToken>)currentList.Clone());
                     currentList = new List<IToken>();
                 }
                 currentList.Add(token);
-                lastNumber++;
+                lastNumber = token.Number;
             }
             splittedTokens.Add((List<IToken>)currentList.Clone());
             return splittedTokens;
