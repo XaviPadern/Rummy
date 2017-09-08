@@ -18,11 +18,7 @@ namespace RummyEnvironment
 
         List<IOperationResult> Add(IToken tokenToInsert);
 
-        List<IOperationResult> Add(IToken tokenToInsert, List<IToken> extraTokens);
-
         List<IOperationResult> Add(List<IToken> tokensToInsert);
-
-        List<IOperationResult> Add(List<IToken> tokensToInsert, List<IToken> extraTokens);
 
         IActionResult CanGet(IToken tokenToGet);
 
@@ -30,10 +26,6 @@ namespace RummyEnvironment
 
         List<IOperationResult> Get(IToken tokenToGet);
 
-        List<IOperationResult> Get(IToken tokensToGet, List<IToken> extraTokens);
-
         List<IOperationResult> Get(List<IToken> tokensToGet);
-
-        List<IOperationResult> Get(List<IToken> tokensToGet, List<IToken> extraTokens);
     }
 }

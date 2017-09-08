@@ -62,6 +62,7 @@
     <Compile Include="Types\Interfaces\IActionResult.cs" />
     <Compile Include="Types\Interfaces\IRummyStructure.cs" />
     <Compile Include="Types\Interfaces\IToken.cs" />
+    <Compile Include="Types\RummySet.cs" />
     <Compile Include="Types\RummyLadder.cs" />
     <Compile Include="Types\RummyStructure.cs" />
     <Compile Include="Types\ActionResult.cs" />

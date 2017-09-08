@@ -7,7 +7,7 @@ namespace RummyEnvironment
     {
         None,
         Retrieving,
-        Modified,
+        SpareTokens,
         Created
     }
 
@@ -15,21 +15,17 @@ namespace RummyEnvironment
     {
         public StructureChanges StructureChanges { get; set; }
 
-        public Guid StructureId { get; set; }
-
         public List<IToken> Tokens { get; set; }
 
         public OperationResult()
         {
             this.StructureChanges = StructureChanges.None;
-            this.StructureId = Guid.Empty;
             this.Tokens = new List<IToken>();
         }
 
-        public OperationResult(StructureChanges structureChanges, Guid id, List<IToken> tokens)
+        public OperationResult(StructureChanges structureChanges, List<IToken> tokens)
         {
             this.StructureChanges = structureChanges;
-            this.StructureId = id;
             this.Tokens = tokens;
         }
     }

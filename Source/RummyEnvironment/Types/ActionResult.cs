@@ -8,10 +8,12 @@ namespace RummyEnvironment
 
         public List<IToken> NeededExtraTokens { get; set; }
 
-        public ActionResult()
+        public ActionResult() : this(false, new List<IToken>())
         {
-            this.ActionIsPossible = false;
-            this.NeededExtraTokens = new List<IToken>();
+        }
+
+        public ActionResult(bool additionIsPossible) : this(additionIsPossible, new List<IToken>())
+        {
         }
 
         public ActionResult(bool additionIsPossible, List<IToken> neededExtraTokens)

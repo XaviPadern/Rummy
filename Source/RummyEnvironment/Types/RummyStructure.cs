@@ -5,9 +5,9 @@ namespace RummyEnvironment
 {
     public abstract class RummyStructure : IRummyStructure
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; protected set; }
 
-        public List<IToken> Tokens { get; private set; }
+        public List<IToken> Tokens { get; protected set; }
 
         protected RummyStructure(List<IToken> tokens)
         {
@@ -32,52 +32,37 @@ namespace RummyEnvironment
             return true;
         }
 
-        public IActionResult CanAdd(IToken tokenToInsert)
-        {
-            return this.CanAdd(new List<IToken> { tokenToInsert });
-        }
+        //public IActionResult CanAdd(IToken tokenToInsert)
+        //{
+        //    return this.CanAdd(new List<IToken> { tokenToInsert });
+        //}
+        public abstract IActionResult CanAdd(IToken tokenToInsert);
 
         public abstract IActionResult CanAdd(List<IToken> tokensToInsert);
 
-        public List<IOperationResult> Add(IToken tokenToInsert)
-        {
-            return this.Add(tokenToInsert, new List <IToken>());
-        }
+        //public List<IOperationResult> Add(IToken tokenToInsert)
+        //{
+        //    return this.Add(new List<IToken> { tokenToInsert });
+        //}
+        public abstract List<IOperationResult> Add(IToken tokenToInsert);
 
-        public List<IOperationResult> Add(IToken tokenToInsert, List<IToken> extraTokens)
-        {
-            return this.Add(new List<IToken> { tokenToInsert }, extraTokens);
-        }
+        public abstract List<IOperationResult> Add(List<IToken> tokensToInsert);
 
-        public List<IOperationResult> Add(List<IToken> tokensToInsert)
-        {
-            return this.Add(tokensToInsert, new List <IToken>());
-        }
-
-        public abstract List<IOperationResult> Add(List<IToken> tokensToInsert, List<IToken> extraTokens);
-
-        public IActionResult CanGet(IToken tokenToGet)
-        {
-            return this.CanGet(new List<IToken> { tokenToGet });
-        }
+        //public IActionResult CanGet(IToken tokenToGet)
+        //{
+        //    return this.CanGet(new List<IToken> { tokenToGet });
+        //}
+        public abstract IActionResult CanGet(IToken tokenToGet);
 
         public abstract IActionResult CanGet(List<IToken> tokensToGet);
 
-        public List<IOperationResult> Get(IToken tokenToGet)
-        {
-            return this.Get(new List<IToken> { tokenToGet });
-        }
-        public List<IOperationResult> Get(IToken tokensToGet, List<IToken> extraTokens)
-        {
-            return this.Get(new List<IToken> { tokensToGet }, extraTokens);
-        }
+        //public List<IOperationResult> Get(IToken tokenToGet)
+        //{
+        //    return this.Get(new List<IToken> { tokenToGet });
+        //}
+        public abstract List<IOperationResult> Get(IToken tokenToGet);
 
-        public List<IOperationResult> Get(List<IToken> tokensToGet)
-        {
-            return this.Get(tokensToGet, new List<IToken>());
-        }
-
-        public abstract List<IOperationResult> Get(List<IToken> tokensToGet, List<IToken> extraTokens);
+        public abstract List<IOperationResult> Get(List<IToken> tokensToGet);
 
         protected void CheckTokenStructure(List<IToken> tokens)
         {

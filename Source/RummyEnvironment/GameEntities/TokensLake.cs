@@ -26,10 +26,12 @@ namespace RummyEnvironment
             List<Color> colors = new List<Color> { Color.Blue, Color.Yellow, Color.Red, Color.Black };
             List<int> numbers = Enumerable.Range(1, 13).ToList();
 
+            // 2 sets of tokens.
             foreach (Color color in colors)
             {
                 foreach (int number in numbers)
                 {
+                    this.Tokens.Add(new Token(color, number));
                     this.Tokens.Add(new Token(color, number));
                 }
             }

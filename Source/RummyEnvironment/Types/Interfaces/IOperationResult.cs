@@ -7,8 +7,6 @@ namespace RummyEnvironment
     {
         StructureChanges StructureChanges { get; set; }
 
-        Guid StructureId { get; set; }
-
         List<IToken> Tokens { get; set; }
     }
 }
