@@ -1639,13 +1639,13 @@ namespace RummyEnvironmentTest
             AssertHelpers.AssertTokenListsContainsTheSameElements(tokensToAssert, referenceTokens);
         }
 
-        private void AssertTokensAreGet(object tokenToGet, bool creationOperationIsExpected)
+        private void AssertTokensAreGet(object tokenToGet, bool spareTokensOperationIsExpected)
         {
-            AssertTokensAreGet(tokenToGet, new List<IToken>(), creationOperationIsExpected);
-        }
+            // Note: TODO: Change the approach:
+            // - Pass the spare tokens list as a parameter.
+            // - Check first modified tokens+tokensToGet.
+            // - Finally, check spare tokens if apply.
 
-        private void AssertTokensAreGet(object tokenToGet, List<IToken> extraTokens, bool creationOperationIsExpected)
-        {
             RummyLadder ladder = new RummyLadder(this.dummyTokens);
 
             List<IToken> tokensToGet;
@@ -1659,26 +1659,38 @@ namespace RummyEnvironmentTest
                 tokensToGet = (List<IToken>)tokenToGet;
             }
 
+            // Save the original token sequence.
             List<IToken> tokensToAssert = ladder.Tokens.Clone().ToList();
-            tokensToAssert = tokensToAssert.Except(tokensToGet).ToList();
-            tokensToAssert.AddRange(extraTokens);
 
-            List<IOperationResult> operationResults = ladder.Get(tokensToGet, extraTokens);
+            // Execute Get().
+            List<IOperationResult> operationResults = ladder.Get(tokensToGet);
+
             Assert.IsNotNull(operationResults);
-
+            Assert.IsTrue(operationResults.Count > 0);
             Assert.AreEqual(StructureChanges.Retrieving, operationResults.First().StructureChanges);
-            AssertHelpers.AssertTokenListsAreTheSame(tokensToGet, operationResults.First().Tokens);
 
-            List<IToken> allTokensFromOperations = ladder.Tokens;
-            
-            if (creationOperationIsExpected)
+            List<IToken> operationTokens = ladder.Tokens;
+
+            // Add retrieved tokens.
+            operationTokens.AddRange(operationResults.First().Tokens);
+
+            if (spareTokensOperationIsExpected)
             {
                 Assert.AreEqual(2, operationResults.Count);
-                Assert.AreEqual(StructureChanges.Created, operationResults.Last().StructureChanges);
-                allTokensFromOperations.AddRange(operationResults.Last().Tokens);
+                Assert.AreEqual(StructureChanges.SpareTokens, operationResults.Last().StructureChanges);
+
+                // If there're spare tokens, add it.
+                operationTokens.AddRange(operationResults.First().Tokens);
+            }
+            else
+            {
+                Assert.AreEqual(1, operationResults.Count);
             }
 
-            AssertHelpers.AssertTokenListsContainsTheSameElements(tokensToAssert, allTokensFromOperations);
+            operationTokens = operationTokens.OrderBy(token => token.Number).ToList();
+
+            // Assert operationTokens is equal to another (only one) in tokensToAssert.
+            AssertHelpers.AssertTokenListsAreTheSame(operationTokens, tokensToAssert);
         }
 
         private void InitializeDummyTokensAsValidLadder()
