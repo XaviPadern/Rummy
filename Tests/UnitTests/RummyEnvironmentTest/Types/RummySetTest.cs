@@ -360,7 +360,7 @@ namespace RummyEnvironmentTest
             }
 
             Assert.AreEqual(desiredResult, result.ActionIsPossible);
-            Assert.IsFalse(result.NeededExtraTokens.Any());
+            Assert.IsFalse(result.SpareTokens.Any());
         }
         
         private void AssertTokensCanBeGet(object tokenToGet, bool desiredResult)
@@ -380,7 +380,7 @@ namespace RummyEnvironmentTest
             }
 
             Assert.AreEqual(desiredResult, result.ActionIsPossible);
-            Assert.IsFalse(result.NeededExtraTokens.Any());
+            Assert.IsFalse(result.SpareTokens.Any());
         }
 
         private void AssertTokenIsAdded(IToken tokenToInsert)
@@ -401,22 +401,24 @@ namespace RummyEnvironmentTest
 
         private void AssertTokenIsGet(IToken tokenToGet)
         {
-            // Set of number 4, size 3 initialized with (Blue, Black, Yellow, Red).
+            // Set of number 4, size 4 initialized with (Blue, Black, Yellow, Red).
             this.InitializeDummyTokensAsValidSetOf4();
             List<IToken> desiredStructureTokens = (List<IToken>)this.dummyTokens.Clone();
-            desiredStructureTokens.Remove(desiredStructureTokens.Last());
-            IToken desiredGetToken = (IToken)tokenToGet.Clone();
+            IToken tokenInStructure = desiredStructureTokens.First(token => token.IsEquivalent(tokenToGet));
+            IToken desiredGetToken = (IToken)tokenInStructure.Clone();
+            desiredStructureTokens.Remove(tokenInStructure);
 
             RummySet set = new RummySet(this.dummyTokens);
-
+            
             List<IOperationResult> operationResults = set.Get(tokenToGet);
 
             Assert.IsNotNull(operationResults);
             Assert.AreEqual(1, operationResults.Count);
 
             Assert.AreEqual(StructureChanges.Retrieving, operationResults.First().StructureChanges);
-            AssertHelpers.AssertTokenListsAreTheSame(new List<IToken> { desiredGetToken }, operationResults.First().Tokens);
+            Assert.AreEqual(1, operationResults.First().Tokens.Count);
 
+            Assert.IsTrue(desiredGetToken.IsEqual(operationResults.First().Tokens.First()));
             AssertHelpers.AssertTokenListsAreTheSame(desiredStructureTokens, set.Tokens);
         }
 

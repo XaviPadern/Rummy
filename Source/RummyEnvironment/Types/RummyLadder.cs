@@ -77,7 +77,7 @@ namespace RummyEnvironment
             {
                 return result;
             }
-            
+
             //Extremes.
             if (this.Tokens.First().IsEquivalent(tokensToGet.First()) ||
                 this.Tokens.Last().IsEquivalent(tokensToGet.Last()))
@@ -90,19 +90,38 @@ namespace RummyEnvironment
             }
 
             int firstTokenIndex = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.First()));
-            int lastTokenIndex = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.First()));
+            int lastTokenIndex = this.Tokens.FindIndex(token => token.IsEquivalent(tokensToGet.Last()));
 
-            if (firstTokenIndex < 3 && (this.Tokens.Count - lastTokenIndex) > 3)
+            List<IToken> remainingTokens = this.Tokens.Clone().ToList();
+            remainingTokens.RemoveRange(firstTokenIndex, lastTokenIndex - firstTokenIndex + 1);
+
+            result.SpareTokens = new List<IToken>();
+
+            List<List<IToken>> resultingLists = this.SplitTokensInLists(remainingTokens);
+
+            if (resultingLists.First().Count < 3 && resultingLists.Last().Count < 3)
             {
-                // Spare tokens in both sides.
+                result.ActionIsPossible = false;
                 return result;
             }
 
             result.ActionIsPossible = true;
-            result.NeededExtraTokens = this.Tokens.Clone().ToList();
-            result.NeededExtraTokens = result.NeededExtraTokens.Except(
-                this.Tokens.GetRange(lastTokenIndex + 1, this.Tokens.Count - lastTokenIndex - 1)).ToList();
 
+            if (resultingLists.Count > 1)
+            {
+                if (resultingLists.First().Count >= resultingLists.Last().Count)
+                {
+                    result.SpareTokens = resultingLists.Last();
+                }
+                else
+                {
+                    result.SpareTokens = resultingLists.First();
+                }
+            }
+            else
+            {
+                result.SpareTokens = resultingLists.Last();
+            }
             return result;
         }
         
@@ -128,16 +147,15 @@ namespace RummyEnvironment
 
             foreach (IToken token in tokensToGet)
             {
-                retrievedTokens.Add((IToken)this.Tokens.First(tok => token.IsEquivalent(tok)).Clone());
+                IToken tokenInStructure = this.Tokens.First(tok => token.IsEquivalent(tok));
+                retrievedTokens.Add((IToken)tokenInStructure.Clone());
+                this.Tokens.Remove(tokenInStructure);
             }
 
             OperationResult retrievingOperation = new OperationResult(StructureChanges.Retrieving, retrievedTokens);
             operationResults.Add(retrievingOperation);
 
-            //this.Tokens.AddRange(extraTokens);
-
-            List<IToken> remainingTokens = this.Tokens.Except(tokensToGet).ToList();
-            List<List<IToken>> resultingLists = this.SplitTokensInLists(remainingTokens);
+            List<List<IToken>> resultingLists = this.SplitTokensInLists(this.Tokens);
 
             if (resultingLists.Count == 1)
             {

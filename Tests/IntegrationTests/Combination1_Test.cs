@@ -1833,7 +1833,7 @@ namespace RummyEnvironmentTest
             IActionResult result = ladder.CanAdd(tokensToInsert);
 
             Assert.AreEqual(desiredResult.ActionIsPossible, result.ActionIsPossible);
-            AssertHelpers.AssertTokenListsContainsEquivalentElements(desiredResult.NeededExtraTokens, result.NeededExtraTokens);
+            AssertHelpers.AssertTokenListsContainsEquivalentElements(desiredResult.SpareTokens, result.SpareTokens);
         }
         
         private void AssertTokensCanBeGet(object tokenToGet, IActionResult desiredResult)
@@ -1863,7 +1863,7 @@ namespace RummyEnvironmentTest
             IActionResult result = ladder.CanGet(tokensToGet);
 
             Assert.AreEqual(desiredResult.ActionIsPossible, result.ActionIsPossible);
-            AssertHelpers.AssertTokenListsContainsEquivalentElements(desiredResult.NeededExtraTokens, result.NeededExtraTokens);
+            AssertHelpers.AssertTokenListsContainsEquivalentElements(desiredResult.SpareTokens, result.SpareTokens);
         }
 
         private void AssertTokensAreAdded(object tokenToInsert, bool creationOperationIsExpected)

@@ -22,7 +22,7 @@ namespace RummyEnvironment
 
         public override IActionResult CanAdd(IToken tokenToInsert)
         {
-            bool isSetNumber = tokenToInsert.Color == this.Tokens.First().Color;
+            bool isSetNumber = tokenToInsert.Number == this.Tokens.First().Number;
             bool isAvailableColor = !this.Tokens.Any(token => token.IsEquivalent(tokenToInsert));
 
             if (isSetNumber && isAvailableColor)
@@ -61,7 +61,7 @@ namespace RummyEnvironment
         public override IActionResult CanGet(IToken tokensToGet)
         {
             bool areAvailableTokens = this.Tokens.Count == 4;
-            bool isSetNumber = tokensToGet.Color == this.Tokens.First().Color;
+            bool isSetNumber = tokensToGet.Number == this.Tokens.First().Number;
             bool tokenExists = this.Tokens.Count(token => token.IsEquivalent(tokensToGet)) == 1;
 
             if (isSetNumber && areAvailableTokens && tokenExists)
@@ -114,9 +114,9 @@ namespace RummyEnvironment
             {
                 return false;
             }
-            
+
             // All the elements have the same number.
-            if (tokens.All(token => token.Number == tokens.First().Number))
+            if (tokens.Any(token => token.Number != tokens.First().Number))
             {
                 return false;
             }

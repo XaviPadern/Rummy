@@ -6,7 +6,7 @@ namespace RummyEnvironment
     {
         public bool ActionIsPossible { get; set; }
 
-        public List<IToken> NeededExtraTokens { get; set; }
+        public List<IToken> SpareTokens { get; set; }
 
         public ActionResult() : this(false, new List<IToken>())
         {
@@ -19,7 +19,7 @@ namespace RummyEnvironment
         public ActionResult(bool additionIsPossible, List<IToken> neededExtraTokens)
         {
             this.ActionIsPossible = additionIsPossible;
-            this.NeededExtraTokens = neededExtraTokens;
+            this.SpareTokens = neededExtraTokens;
         }
     }
 }

@@ -6,6 +6,6 @@ namespace RummyEnvironment
     {
         bool ActionIsPossible { get; set; }
 
-        List<IToken> NeededExtraTokens { get; set; }
+        List<IToken> SpareTokens { get; set; }
     }
 }

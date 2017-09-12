@@ -522,7 +522,7 @@ namespace RummyEnvironmentTest
         public void RummyLadder_AddOnlyOneTokenInInitialExtreme_Succeeds()
         {
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-            this.AssertTokensAreAdded(new Token(Color.Blue, 3), true);
+            this.AssertTokensAreAdded(new Token(Color.Blue, 3), false);
         }
 
         [TestMethod]
@@ -644,21 +644,6 @@ namespace RummyEnvironmentTest
         }
 
         [TestMethod]
-        public void RummyLadder_CanGetOnlyOneTokenInMiddle_IsPossibleNoSpareTokens()
-        {
-            IActionResult desiredResult = new ActionResult(true);
-
-            List<IToken> structureTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7),
-                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),
-                new Token(Color.Blue, 11)
-            };
-
-            this.AssertTokensCanBeGet(structureTokens, new Token(Color.Blue, 8), desiredResult);
-        }
-
-        [TestMethod]
         public void RummyLadder_CanGetOnlyOneTokenInInitialExtreme1_IsPossibleWithSpareTokens()
         {
             List<IToken> spareTokens = new List<IToken>
@@ -666,7 +651,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 1)
             };
 
-            IActionResult desiredResult = new ActionResult(false, spareTokens);
+            IActionResult desiredResult = new ActionResult(true, spareTokens);
 
             List<IToken> structureTokens = new List<IToken>
             {
@@ -686,7 +671,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 2)
             };
             
-            IActionResult desiredResult = new ActionResult(false, spareTokens);
+            IActionResult desiredResult = new ActionResult(true, spareTokens);
 
             List<IToken> structureTokens = new List<IToken>
             {
@@ -705,7 +690,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 6)
             };
 
-            IActionResult desiredResult = new ActionResult(false, spareTokens);
+            IActionResult desiredResult = new ActionResult(true, spareTokens);
 
             List<IToken> structureTokens = new List<IToken>
             {
@@ -725,7 +710,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 6)
             };
 
-            IActionResult desiredResult = new ActionResult(false, spareTokens);
+            IActionResult desiredResult = new ActionResult(true, spareTokens);
 
             List<IToken> structureTokens = new List<IToken>
             {
@@ -735,11 +720,11 @@ namespace RummyEnvironmentTest
 
             this.AssertTokensCanBeGet(structureTokens, new Token(Color.Blue, 4), desiredResult);
         }
-
+        
         [TestMethod]
-        public void RummyLadder_CanGetOnlyOneTokenInMiddle_IsPossibleWithSpareTokens()
+        public void RummyLadder_CanGetOnlyOneTokenInMiddle1_NotPossible()
         {
-            IActionResult desiredResult = new ActionResult(true);
+            IActionResult desiredResult = new ActionResult(false);
 
             List<IToken> structureTokens = new List<IToken>
             {
@@ -749,12 +734,34 @@ namespace RummyEnvironmentTest
 
             this.AssertTokensCanBeGet(structureTokens, new Token(Color.Blue, 7), desiredResult);
         }
-        
-		#endregion
 
-		#region CanGet_TokenList
+        [TestMethod]
+        public void RummyLadder_CanGetOnlyOneTokenInMiddle2_IsPossibleWithSpareTokens()
+        {
+            List<IToken> desiredSpareTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11)
+            };
 
-		[TestMethod]
+            IActionResult desiredResult = new ActionResult(true, desiredSpareTokens);
+
+            List<IToken> structureTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7),
+                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11)
+            };
+
+            this.AssertTokensCanBeGet(structureTokens, new Token(Color.Blue, 8), desiredResult);
+        }
+
+        #endregion
+
+        #region CanGet_TokenList
+
+        [TestMethod]
 		public void RummyLadder_CanGetTokenListInvalidColors_ExceptionThrown()
 		{
 			// Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
@@ -921,46 +928,6 @@ namespace RummyEnvironmentTest
 		}
 
         [TestMethod]
-        public void RummyLadder_CanGetTokenListInInMiddle1_IsPossibleNoSpareTokens()
-        {
-            IActionResult desiredResult = new ActionResult(true);
-
-            List<IToken> structureTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7),
-                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),
-                new Token(Color.Blue, 11), new Token(Color.Blue, 12), new Token(Color.Blue, 13)
-            };
-
-            List<IToken> tokensToGet = new List<IToken>
-            {
-                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10)
-            };
-
-            this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
-        }
-
-        [TestMethod]
-        public void RummyLadder_CanGetTokenListInInMiddle2_IsPossibleNoSpareTokens()
-        {
-            IActionResult desiredResult = new ActionResult(true);
-
-            List<IToken> structureTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7),
-                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),
-                new Token(Color.Blue, 11), new Token(Color.Blue, 12)
-            };
-
-            List<IToken> tokensToGet = new List<IToken>
-            {
-                new Token(Color.Blue, 8), new Token(Color.Blue, 9)
-            };
-
-            this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
-        }
-        
-		[TestMethod]
 		public void RummyLadder_CanGetTokenListInInitialExtremeWithSpareTokens1_IsPossibleWithSpareTokens()
 		{
 			List<IToken> structureTokens = new List<IToken>
@@ -982,7 +949,7 @@ namespace RummyEnvironmentTest
 
 			IActionResult desiredResult = new ActionResult(true, desiredSpareTokens);
 
-            this.AssertTokensCanBeGet(tokensToGet, desiredResult);
+            this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
         }
 
 		[TestMethod]
@@ -1063,92 +1030,57 @@ namespace RummyEnvironmentTest
 			this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
 		}
 
-		[TestMethod]
-		public void RummyLadder_CanGetTokenListInMiddleWithSpareTokens1_IsPossibleWithSpareTokens()
-		{
-			List<IToken> tokensToGet = new List<IToken>
-			{
-                new Token(Color.Blue, 5), new Token(Color.Blue, 6)
-			};
-
-			List<IToken> desiredSpareTokens = new List<IToken>
-			{
-				new Token(Color.Blue, 4)
-			};
-
-			IActionResult desiredResult = new ActionResult(true, desiredSpareTokens);
-
-		    // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-			this.AssertTokensCanBeGet(tokensToGet, desiredResult);
-		}
-
-		[TestMethod]
-		public void RummyLadder_CanGetTokenListInMiddleWithSpareTokens2_IsPossibleWithSpareTokens()
-		{
-		    List<IToken> tokensToGet = new List<IToken>
-		    {
-		        new Token(Color.Blue, 7), new Token(Color.Blue, 8)
-		    };
-
-		    List<IToken> desiredSpareTokens = new List<IToken>
-		    {
-		        new Token(Color.Blue, 9)
-		    };
-
-		    IActionResult desiredResult = new ActionResult(true, desiredSpareTokens);
-
-		    // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-		    this.AssertTokensCanBeGet(tokensToGet, desiredResult);
-        }
-
         [TestMethod]
-        public void RummyLadder_CanGetTokenListInMiddleWithSpareTokens3_IsPossibleWithSpareTokens()
+        public void RummyLadder_CanGetTokenListInInMiddle1_IsPossibleWithSpareTokens()
         {
             List<IToken> structureTokens = new List<IToken>
             {
-                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
-                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
-                new Token(Color.Blue, 10)
+                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7),
+                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11), new Token(Color.Blue, 12), new Token(Color.Blue, 13)
             };
 
             List<IToken> tokensToGet = new List<IToken>
             {
-                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7)
+                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10)
             };
 
             List<IToken> desiredSpareTokens = new List<IToken>
             {
-                new Token(Color.Blue, 4)
+                new Token(Color.Blue, 11),
+                new Token(Color.Blue, 12),
+                new Token(Color.Blue, 13)
             };
 
             IActionResult desiredResult = new ActionResult(true, desiredSpareTokens);
 
-            this.AssertTokensCanBeGet(tokensToGet, desiredResult);
+            this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
         }
 
         [TestMethod]
-        public void RummyLadder_CanGetTokenListInMiddleWithSpareTokens4_IsPossibleWithSpareTokens()
+        public void RummyLadder_CanGetTokenListInInMiddle2_IsPossibleWithSpareTokens()
         {
             List<IToken> structureTokens = new List<IToken>
             {
-                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
-                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
-                new Token(Color.Blue, 10)
+                new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7),
+                new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11), new Token(Color.Blue, 12)
             };
 
             List<IToken> tokensToGet = new List<IToken>
             {
-                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)
+                new Token(Color.Blue, 8), new Token(Color.Blue, 9)
             };
 
             List<IToken> desiredSpareTokens = new List<IToken>
             {
-                new Token(Color.Blue, 10)
+                new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11),
+                new Token(Color.Blue, 12)
             };
 
             IActionResult desiredResult = new ActionResult(true, desiredSpareTokens);
-
-            this.AssertTokensCanBeGet(tokensToGet, desiredResult);
+            this.AssertTokensCanBeGet(structureTokens, tokensToGet, desiredResult);
         }
 
         [TestMethod]
@@ -1160,7 +1092,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 7), new Token(Color.Blue, 8)
             };
 
-            IActionResult desiredResult = new ActionResult(true);
+            IActionResult desiredResult = new ActionResult(false);
 
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.AssertTokensCanBeGet(tokensToGet, desiredResult);
@@ -1174,7 +1106,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 6), new Token(Color.Blue, 7)
             };
 
-            IActionResult desiredResult = new ActionResult(true);
+            IActionResult desiredResult = new ActionResult(false);
 
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.AssertTokensCanBeGet(tokensToGet, desiredResult);
@@ -1205,7 +1137,7 @@ namespace RummyEnvironmentTest
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
             
-            this.AssertTokensAreGet(new Token(Color.Blue, 4), false);         
+            this.AssertTokensAreGet(new Token(Color.Blue, 4));         
         }
 
         [TestMethod]
@@ -1219,7 +1151,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 4)
             };
 
-            this.AssertTokensAreGet(new Token(Color.Blue, 1), false);
+            this.AssertTokensAreGet(new Token(Color.Blue, 1));
         }
 
         [TestMethod]
@@ -1228,7 +1160,7 @@ namespace RummyEnvironmentTest
             // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
             this.InitializeDummyTokensAsValidLadder();
 
-            this.AssertTokensAreGet(new Token(Color.Blue, 9), false);
+            this.AssertTokensAreGet(new Token(Color.Blue, 9));
         }
         
         [TestMethod]
@@ -1242,11 +1174,69 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 13)
             };
 
-            this.AssertTokensAreGet(new Token(Color.Blue, 13), false);
+            this.AssertTokensAreGet(new Token(Color.Blue, 13));
+        }
+        
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithSpareTokens1_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> expectedSpareTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 5), expectedSpareTokens);
         }
 
         [TestMethod]
-        public void RummyLadder_GetOnlyOneTokenInMiddle_SucceedsWithoutSpareTokens()
+        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithSpareTokens2_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> expectedSpareTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4),
+                new Token(Color.Blue, 5)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 6), expectedSpareTokens);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithSpareTokens1_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> expectedSpareTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 9)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 8), expectedSpareTokens);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithSpareTokens2_Succeeds()
+        {
+            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
+            this.InitializeDummyTokensAsValidLadder();
+
+            List<IToken> expectedSpareTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 8),
+                new Token(Color.Blue, 9)
+            };
+
+            this.AssertTokensAreGet(new Token(Color.Blue, 7), expectedSpareTokens);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetOnlyOneTokenInMiddle_SucceedsWithSpareTokens()
         {
             this.dummyTokens = new List<IToken>
             {
@@ -1259,63 +1249,14 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 13)
             };
 
-            this.AssertTokensAreGet(new Token(Color.Blue, 10), true);
-        }
-
-        [TestMethod]
-        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithSpareTokens1_Succeeds()
-        {
-            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-            this.InitializeDummyTokensAsValidLadder();
-
-            List<IToken> espareTokens = new List<IToken>
+            List<IToken> expectedSpareTokens = new List<IToken>
             {
-                new Token(Color.Blue, 4)
+                new Token(Color.Blue, 11),
+                new Token(Color.Blue, 12),
+                new Token(Color.Blue, 13)
             };
 
-            this.AssertTokensAreGet(new Token(Color.Blue, 5), espareTokens, true);
-        }
-
-        [TestMethod]
-        public void RummyLadder_GetOnlyOneTokenInInitialExtremeWithSpareTokens2_Succeeds()
-        {
-            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-            this.InitializeDummyTokensAsValidLadder();
-
-            List<IToken> espareTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 4), new Token(Color.Blue, 5)
-            };
-
-            this.AssertTokensAreGet(new Token(Color.Blue, 6), espareTokens, true);
-        }
-
-        [TestMethod]
-        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithSpareTokens1_Succeeds()
-        {
-            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-            this.InitializeDummyTokensAsValidLadder();
-
-            List<IToken> espareTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 9)
-            };
-
-            this.AssertTokensAreGet(new Token(Color.Blue, 8), espareTokens, true);
-        }
-
-        [TestMethod]
-        public void RummyLadder_GetOnlyOneTokenInFinalExtremeWithSpareTokens2_Succeeds()
-        {
-            // Ladder initialized with 4, 5, 6, 7, 8, 9 (Blue).
-            this.InitializeDummyTokensAsValidLadder();
-
-            List<IToken> espareTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 8), new Token(Color.Blue, 9)
-            };
-
-            this.AssertTokensAreGet(new Token(Color.Blue, 7), espareTokens, true);
+            this.AssertTokensAreGet(new Token(Color.Blue, 10), expectedSpareTokens);
         }
 
         #endregion
@@ -1363,7 +1304,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6)
             };
 
-            this.AssertTokensAreGet(tokensToGet, true);
+            this.AssertTokensAreGet(tokensToGet);
         }
 
         [TestMethod]
@@ -1380,7 +1321,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 1), new Token(Color.Blue, 2), new Token(Color.Blue, 3)
             };
 
-            this.AssertTokensAreGet(tokensToGet, true);
+            this.AssertTokensAreGet(tokensToGet);
         }
 
         [TestMethod]
@@ -1394,7 +1335,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)
             };
 
-            this.AssertTokensAreGet(tokensToGet, true);
+            this.AssertTokensAreGet(tokensToGet);
         }
 
         [TestMethod]
@@ -1411,43 +1352,7 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 11), new Token(Color.Blue, 12), new Token(Color.Blue, 13)
             };
 
-            this.AssertTokensAreGet(tokensToGet, true);
-        }
-
-        [TestMethod]
-        public void RummyLadder_GetTokenListInMiddle1_SucceedWithoutSpareTokens()
-        {
-            this.dummyTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
-                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
-                new Token(Color.Blue, 10), new Token(Color.Blue, 11), new Token(Color.Blue, 12)
-            };
-
-            List<IToken> tokensToGet = new List<IToken>
-            {
-                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)
-            };
-
-            this.AssertTokensAreGet(tokensToGet, true);
-        }
-
-        [TestMethod]
-        public void RummyLadder_GetTokenListInMiddle2_SucceedWithoutSpareTokens()
-        {
-            this.dummyTokens = new List<IToken>
-            {
-                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
-                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
-                new Token(Color.Blue, 10), new Token(Color.Blue, 11)
-            };
-
-            List<IToken> tokensToGet = new List<IToken>
-            {
-                new Token(Color.Blue, 7), new Token(Color.Blue, 8)
-            };
-
-            this.AssertTokensAreGet(tokensToGet, true);
+            this.AssertTokensAreGet(tokensToGet);
         }
 
         [TestMethod]
@@ -1465,12 +1370,12 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 5), new Token(Color.Blue, 6), new Token(Color.Blue, 7)
             };
 
-            List<IToken> desiredSpareTokens = new List<IToken>
+            List<IToken> expectedSpareTokens = new List<IToken>
             {
                 new Token(Color.Blue, 4)
             };
 
-            this.AssertTokensAreGet(tokensToGet, desiredSpareTokens, true);
+            this.AssertTokensAreGet(tokensToGet, expectedSpareTokens);
         }
 
         [TestMethod]
@@ -1488,13 +1393,13 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 6), new Token(Color.Blue, 7), new Token(Color.Blue, 8)
             };
 
-            List<IToken> desiredSpareTokens = new List<IToken>
+            List<IToken> expectedSpareTokens = new List<IToken>
             {
                 new Token(Color.Blue, 4),
                 new Token(Color.Blue, 5)
             };
 
-            this.AssertTokensAreGet(tokensToGet, desiredSpareTokens, true);
+            this.AssertTokensAreGet(tokensToGet, expectedSpareTokens);
         }
 
         [TestMethod]
@@ -1512,12 +1417,12 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 9), new Token(Color.Blue, 10), new Token(Color.Blue, 11)
             };
 
-            List<IToken> desiredSpareTokens = new List<IToken>
+            List<IToken> expectedSpareTokens = new List<IToken>
             {
                 new Token(Color.Blue, 12)
             };
 
-            this.AssertTokensAreGet(tokensToGet, desiredSpareTokens, true);
+            this.AssertTokensAreGet(tokensToGet, expectedSpareTokens);
         }
 
         [TestMethod]
@@ -1535,13 +1440,63 @@ namespace RummyEnvironmentTest
                 new Token(Color.Blue, 8), new Token(Color.Blue, 9), new Token(Color.Blue, 10)
             };
 
-            List<IToken> desiredSpareTokens = new List<IToken>
+            List<IToken> expectedSpareTokens = new List<IToken>
             {
                 new Token(Color.Blue, 11),
                 new Token(Color.Blue, 12)
             };
 
-            this.AssertTokensAreGet(tokensToGet, desiredSpareTokens, true);
+            this.AssertTokensAreGet(tokensToGet, expectedSpareTokens);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInMiddle1_SucceedWithSpareTokens()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10), new Token(Color.Blue, 11), new Token(Color.Blue, 12)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9)
+            };
+
+            List<IToken> expectedSpareTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11),
+                new Token(Color.Blue, 12)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, expectedSpareTokens);
+        }
+
+        [TestMethod]
+        public void RummyLadder_GetTokenListInMiddle2_SucceedWithSpareTokens()
+        {
+            this.dummyTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 4), new Token(Color.Blue, 5), new Token(Color.Blue, 6),
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8), new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10), new Token(Color.Blue, 11)
+            };
+
+            List<IToken> tokensToGet = new List<IToken>
+            {
+                new Token(Color.Blue, 7), new Token(Color.Blue, 8)
+            };
+
+            List<IToken> expectedSpareTokens = new List<IToken>
+            {
+                new Token(Color.Blue, 9),
+                new Token(Color.Blue, 10),
+                new Token(Color.Blue, 11)
+            };
+
+            this.AssertTokensAreGet(tokensToGet, expectedSpareTokens);
         }
 
         #endregion
@@ -1572,7 +1527,7 @@ namespace RummyEnvironmentTest
             IActionResult result = ladder.CanAdd(tokensToInsert);
 
             Assert.AreEqual(desiredResult, result.ActionIsPossible);
-            Assert.AreEqual(0, result.NeededExtraTokens.Count);
+            Assert.AreEqual(0, result.SpareTokens.Count);
         }
         
         private void AssertTokensCanBeGet(object tokenToGet, IActionResult desiredResult)
@@ -1602,7 +1557,7 @@ namespace RummyEnvironmentTest
             IActionResult result = ladder.CanGet(tokensToGet);
 
             Assert.AreEqual(desiredResult.ActionIsPossible, result.ActionIsPossible);
-            AssertHelpers.AssertTokenListsContainsEquivalentElements(desiredResult.NeededExtraTokens, result.NeededExtraTokens);
+            AssertHelpers.AssertTokenListsContainsEquivalentElements(desiredResult.SpareTokens, result.SpareTokens);
         }
 
         private void AssertTokensAreAdded(object tokenToInsert, bool creationOperationIsExpected)
@@ -1639,7 +1594,13 @@ namespace RummyEnvironmentTest
             AssertHelpers.AssertTokenListsContainsTheSameElements(tokensToAssert, referenceTokens);
         }
 
-        private void AssertTokensAreGet(object tokenToGet, bool spareTokensOperationIsExpected)
+        private void AssertTokensAreGet(object tokenToGet)
+        {
+            this.AssertTokensAreGet(tokenToGet, new List<IToken>());
+        }
+
+        //private void AssertTokensAreGet(object tokenToGet, bool spareTokensOperationIsExpected)
+        private void AssertTokensAreGet(object tokenToGet, List<IToken> expectedSpareTokens)
         {
             // Note: TODO: Change the approach:
             // - Pass the spare tokens list as a parameter.
@@ -1660,7 +1621,25 @@ namespace RummyEnvironmentTest
             }
 
             // Save the original token sequence.
-            List<IToken> tokensToAssert = ladder.Tokens.Clone().ToList();
+            //List<IToken> tokensToAssert = ladder.Tokens.Clone().ToList();
+
+            List<IToken> expectedModifiedTokens = ladder.Tokens.Clone().ToList();
+            List<IToken> realExpectedGetTokens = new List<IToken>();
+            List<IToken> realExpectedSpareTokens = new List<IToken>();
+            
+            foreach (IToken token in tokensToGet)
+            {
+                IToken tokenInStructure = expectedModifiedTokens.First(tok => tok.IsEquivalent(token));
+                realExpectedGetTokens.Add(tokenInStructure);
+                expectedModifiedTokens.Remove(tokenInStructure);
+            }
+
+            foreach (IToken token in expectedSpareTokens)
+            {
+                IToken tokenInStructure = expectedModifiedTokens.First(tok => tok.IsEquivalent(token));
+                realExpectedSpareTokens.Add(tokenInStructure);
+                expectedModifiedTokens.Remove(tokenInStructure);
+            }
 
             // Execute Get().
             List<IOperationResult> operationResults = ladder.Get(tokensToGet);
@@ -1669,28 +1648,49 @@ namespace RummyEnvironmentTest
             Assert.IsTrue(operationResults.Count > 0);
             Assert.AreEqual(StructureChanges.Retrieving, operationResults.First().StructureChanges);
 
-            List<IToken> operationTokens = ladder.Tokens;
+            AssertHelpers.AssertTokenListsContainsTheSameElements(realExpectedGetTokens, operationResults.First().Tokens);
+            AssertHelpers.AssertTokenListsContainsTheSameElements(expectedModifiedTokens, ladder.Tokens);
 
-            // Add retrieved tokens.
-            operationTokens.AddRange(operationResults.First().Tokens);
-
-            if (spareTokensOperationIsExpected)
+            if (expectedSpareTokens.Count > 0)
             {
                 Assert.AreEqual(2, operationResults.Count);
                 Assert.AreEqual(StructureChanges.SpareTokens, operationResults.Last().StructureChanges);
-
-                // If there're spare tokens, add it.
-                operationTokens.AddRange(operationResults.First().Tokens);
+                AssertHelpers.AssertTokenListsContainsTheSameElements(realExpectedSpareTokens, operationResults.Last().Tokens);
             }
             else
             {
                 Assert.AreEqual(1, operationResults.Count);
             }
 
-            operationTokens = operationTokens.OrderBy(token => token.Number).ToList();
 
-            // Assert operationTokens is equal to another (only one) in tokensToAssert.
-            AssertHelpers.AssertTokenListsAreTheSame(operationTokens, tokensToAssert);
+
+
+            //Assert.IsNotNull(operationResults);
+            //Assert.IsTrue(operationResults.Count > 0);
+            //Assert.AreEqual(StructureChanges.Retrieving, operationResults.First().StructureChanges);
+
+            //List<IToken> operationTokens = ladder.Tokens;
+
+            //// Add retrieved tokens.
+            //operationTokens.AddRange(operationResults.First().Tokens);
+
+            //if (spareTokensOperationIsExpected)
+            //{
+            //    Assert.AreEqual(2, operationResults.Count);
+            //    Assert.AreEqual(StructureChanges.SpareTokens, operationResults.Last().StructureChanges);
+
+            //    // If there're spare tokens, add it.
+            //    operationTokens.AddRange(operationResults.First().Tokens);
+            //}
+            //else
+            //{
+            //    Assert.AreEqual(1, operationResults.Count);
+            //}
+
+            //operationTokens = operationTokens.OrderBy(token => token.Number).ToList();
+
+            //// Assert operationTokens is equal to another (only one) in tokensToAssert.
+            //AssertHelpers.AssertTokenListsAreTheSame(operationTokens, tokensToAssert);
         }
 
         private void InitializeDummyTokensAsValidLadder()
