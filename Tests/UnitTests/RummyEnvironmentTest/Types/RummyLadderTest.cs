@@ -792,7 +792,7 @@ namespace RummyEnvironmentTest
 		}
 
 		[TestMethod]
-		public void RummyLadder_CanGetTokenListNotTheSameColor_NotPossibleNoExtraTokens()
+		public void RummyLadder_CanGetTokenListNotTheSameColor_NotPossible()
 		{
 			IActionResult desiredResult = new ActionResult(false);
 
@@ -806,7 +806,7 @@ namespace RummyEnvironmentTest
 		}
 
         [TestMethod]
-        public void RummyLadder_CanGetTokenListOutOfLimitsInInitialExtreme1_NotPossibleNoExtraTokens()
+        public void RummyLadder_CanGetTokenListOutOfLimitsInInitialExtreme1_NotPossible()
         {
             IActionResult desiredResult = new ActionResult(false);
 
@@ -820,7 +820,7 @@ namespace RummyEnvironmentTest
         }
 
         [TestMethod]
-        public void RummyLadder_CanGetTokenListOutOfLimitsInInitialExtreme2_NotPossibleNoExtraTokens()
+        public void RummyLadder_CanGetTokenListOutOfLimitsInInitialExtreme2_NotPossible()
         {
             IActionResult desiredResult = new ActionResult(false);
 
@@ -834,7 +834,7 @@ namespace RummyEnvironmentTest
         }
 
         [TestMethod]
-        public void RummyLadder_CanGetTokenListOutOfLimitsInFinalExtreme1_NotPossibleNoExtraTokens()
+        public void RummyLadder_CanGetTokenListOutOfLimitsInFinalExtreme1_NotPossible()
         {
             IActionResult desiredResult = new ActionResult(false);
 
@@ -848,7 +848,7 @@ namespace RummyEnvironmentTest
         }
 
         [TestMethod]
-        public void RummyLadder_CanGetTokenListOutOfLimitsInFinalExtreme2_NotPossibleNoExtraTokens()
+        public void RummyLadder_CanGetTokenListOutOfLimitsInFinalExtreme2_NotPossible()
         {
             IActionResult desiredResult = new ActionResult(false);
 
@@ -1599,14 +1599,8 @@ namespace RummyEnvironmentTest
             this.AssertTokensAreGet(tokenToGet, new List<IToken>());
         }
 
-        //private void AssertTokensAreGet(object tokenToGet, bool spareTokensOperationIsExpected)
         private void AssertTokensAreGet(object tokenToGet, List<IToken> expectedSpareTokens)
         {
-            // Note: TODO: Change the approach:
-            // - Pass the spare tokens list as a parameter.
-            // - Check first modified tokens+tokensToGet.
-            // - Finally, check spare tokens if apply.
-
             RummyLadder ladder = new RummyLadder(this.dummyTokens);
 
             List<IToken> tokensToGet;
@@ -1619,9 +1613,6 @@ namespace RummyEnvironmentTest
             {
                 tokensToGet = (List<IToken>)tokenToGet;
             }
-
-            // Save the original token sequence.
-            //List<IToken> tokensToAssert = ladder.Tokens.Clone().ToList();
 
             List<IToken> expectedModifiedTokens = ladder.Tokens.Clone().ToList();
             List<IToken> realExpectedGetTokens = new List<IToken>();
@@ -1661,36 +1652,6 @@ namespace RummyEnvironmentTest
             {
                 Assert.AreEqual(1, operationResults.Count);
             }
-
-
-
-
-            //Assert.IsNotNull(operationResults);
-            //Assert.IsTrue(operationResults.Count > 0);
-            //Assert.AreEqual(StructureChanges.Retrieving, operationResults.First().StructureChanges);
-
-            //List<IToken> operationTokens = ladder.Tokens;
-
-            //// Add retrieved tokens.
-            //operationTokens.AddRange(operationResults.First().Tokens);
-
-            //if (spareTokensOperationIsExpected)
-            //{
-            //    Assert.AreEqual(2, operationResults.Count);
-            //    Assert.AreEqual(StructureChanges.SpareTokens, operationResults.Last().StructureChanges);
-
-            //    // If there're spare tokens, add it.
-            //    operationTokens.AddRange(operationResults.First().Tokens);
-            //}
-            //else
-            //{
-            //    Assert.AreEqual(1, operationResults.Count);
-            //}
-
-            //operationTokens = operationTokens.OrderBy(token => token.Number).ToList();
-
-            //// Assert operationTokens is equal to another (only one) in tokensToAssert.
-            //AssertHelpers.AssertTokenListsAreTheSame(operationTokens, tokensToAssert);
         }
 
         private void InitializeDummyTokensAsValidLadder()

@@ -16,10 +16,10 @@ namespace RummyEnvironment
         {
         }
 
-        public ActionResult(bool additionIsPossible, List<IToken> neededExtraTokens)
+        public ActionResult(bool additionIsPossible, List<IToken> spareTokens)
         {
             this.ActionIsPossible = additionIsPossible;
-            this.SpareTokens = neededExtraTokens;
+            this.SpareTokens = spareTokens;
         }
     }
 }
